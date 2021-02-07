@@ -46,7 +46,7 @@ export default function App() {
                   <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" className={classes.title}>
-                  Netlogs
+                  KG7AII
                 </Typography>
                 <IconButton
                   aria-label="account of current user"
