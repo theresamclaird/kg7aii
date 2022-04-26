@@ -37,7 +37,7 @@ export default function App() {
             <AppBar position="static">
               <Toolbar>
                 <Typography variant="h6" className={classes.title}>
-                  KG7AII
+                  Net Log
                 </Typography>
                 <IconButton
                   aria-label="account of current user"
