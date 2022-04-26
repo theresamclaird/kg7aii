@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useReducer } from "react";
 import { Box, Grid } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Round from "../Round";
@@ -126,7 +127,7 @@ export default ({ number, addRoundToNet }) => {
       component={Paper}
     >
       <Grid item container xs={10} spacing={2}>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <TextField
             autoFocus
             fullWidth={true}
@@ -161,36 +162,15 @@ export default ({ number, addRoundToNet }) => {
             }}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={9}><Typography variant="body2">{station.name}<br />{station.location}</Typography></Grid>
+        <Grid item xs={9}>
           <TextField
             fullWidth={true}
-            label="name"
+            label="Preferred Name"
             value={station.name}
             variant="outlined"
             size="small"
-            onKeyPress={handleKeyPress}
-            onChange={(e) =>
-              stationDispatch({
-                type: STATION.NAME,
-                payload: e.target.value
-              })
-            }
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <TextField
-            fullWidth={true}
-            label="location"
-            value={station.location}
-            variant="outlined"
-            size="small"
-            onKeyPress={handleKeyPress}
-            onChange={(e) =>
-              stationDispatch({
-                type: STATION.LOCATION,
-                payload: e.target.value
-              })
-            }
+            onChange={(e) => {}}
           />
         </Grid>
         <Grid item xs={10}>
@@ -276,7 +256,7 @@ export default ({ number, addRoundToNet }) => {
           >
             Station
           </Button>
-      </Grid>
+        </Grid>
       </Grid>
       <Grid item xs={2}>
         {station.image 
