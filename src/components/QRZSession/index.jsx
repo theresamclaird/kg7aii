@@ -193,6 +193,11 @@ export const QRZSessionProvider = ({ children }) => {
       result.location = qrzStation?.country;
     }
 
+    if (qrzStation?.image) {
+      console.log('image: ', qrzStation.image);
+      result.image = qrzStation.image;
+    }
+
     let newSessionStations = cloneObject(sessionStations);
     newSessionStations[result.callsign] = result;
     setSessionStations(newSessionStations);

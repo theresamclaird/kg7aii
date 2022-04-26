@@ -32,7 +32,7 @@ export default ({ number, stations, allowHideStations = false }) => {
           <Table size="small" aria-label="nets table">
             <TableHead>
               <TableRow>
-                <TableCell colSpan={9} className={classes.tableHead}>
+                <TableCell colSpan={10} className={classes.tableHead}>
                   {allowHideStations && (
                     <IconButton
                       style={{ color: "white" }}

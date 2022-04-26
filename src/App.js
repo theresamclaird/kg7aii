@@ -5,7 +5,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { PersistentItemsProvider } from "./components/PersistentItemsProvider";
 import { QRZSessionProvider } from "./components/QRZSession";
@@ -37,14 +36,6 @@ export default function App() {
           <Grid item xs={12}>
             <AppBar position="static">
               <Toolbar>
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  color="inherit"
-                  aria-label="menu"
-                >
-                  <MenuIcon />
-                </IconButton>
                 <Typography variant="h6" className={classes.title}>
                   KG7AII
                 </Typography>
@@ -57,10 +48,7 @@ export default function App() {
                 >
                   <AccountCircle />
                 </IconButton>
-                <QRZAccountDialog
-                  open={open}
-                  handleClose={() => setOpen(false)}
-                />
+                <QRZAccountDialog open={open} handleClose={() => setOpen(false)} />
               </Toolbar>
             </AppBar>
           </Grid>
