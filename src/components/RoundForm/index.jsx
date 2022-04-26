@@ -1,5 +1,5 @@
 import React, { useRef, useContext, useReducer } from "react";
-import { Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Round from "../Round";
@@ -62,7 +62,7 @@ const stationReducer = (state, action) => {
     case STATION.RESET:
       return initialStation;
     case STATION.CLEAR:
-      return { ...state, name: "", location: "" };
+      return { ...state, name: "", location: "", image: "" };
     default:
       return state;
   }
@@ -107,17 +107,26 @@ export default ({ number, addRoundToNet }) => {
     }
   };
 
+  const imageStyle = {
+    maxWidth: "100%",
+    maxHeight: "100px",
+    width: "auto",
+    height: "auto",
+    objectFit: "contain",
+    float: "right",
+  };
+  
   return (
-    <Grid container justify="space-between">
-      <Grid
-        item
-        container
-        justify="space-between"
-        xs={12}
-        spacing={4}
-        component={Paper}
-      >
-        <Grid item xs={12} sm={6} md={4} lg={4}>
+    <Grid
+      item
+      container
+      justify="space-between"
+      xs={12}
+      spacing={2}
+      component={Paper}
+    >
+      <Grid item container xs={10} spacing={2}>
+        <Grid item xs={4}>
           <TextField
             autoFocus
             fullWidth={true}
@@ -141,7 +150,8 @@ export default ({ number, addRoundToNet }) => {
                     type: STATION.SET,
                     payload: {
                       name: station.name,
-                      location: station.location
+                      location: station.location,
+                      image: station.image,
                     }
                   })
                 );
@@ -151,7 +161,7 @@ export default ({ number, addRoundToNet }) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={4}>
+        <Grid item xs={4}>
           <TextField
             fullWidth={true}
             label="name"
@@ -167,7 +177,7 @@ export default ({ number, addRoundToNet }) => {
             }
           />
         </Grid>
-        <Grid item xs={12} md={4} lg={4}>
+        <Grid item xs={4}>
           <TextField
             fullWidth={true}
             label="location"
@@ -183,7 +193,7 @@ export default ({ number, addRoundToNet }) => {
             }
           />
         </Grid>
-        <Grid item xs={12} sm={9}>
+        <Grid item xs={10}>
           <FormGroup row>
             <FormControlLabel
               control={
@@ -255,7 +265,7 @@ export default ({ number, addRoundToNet }) => {
             />
           </FormGroup>
         </Grid>
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={2}>
           <Button
             style={{ float: "right" }}
             startIcon={<QueueIcon />}
@@ -266,28 +276,33 @@ export default ({ number, addRoundToNet }) => {
           >
             Station
           </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Round number={number} stations={stations} />
-        </Grid>
-        {stations.length > 0 && (
-          <Grid item xs={12}>
-            <Button
-              startIcon={<QueueIcon />}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                addRoundToNet(stations);
-                stationsDispatch({ type: STATIONS.RESET });
-                resetStationForm();
-              }}
-              size="small"
-            >
-              Round
-            </Button>
-          </Grid>
-        )}
       </Grid>
+      </Grid>
+      <Grid item xs={2}>
+        {station.image 
+          ? <Box style={imageStyle} component="img" height={100} src={station.image} />
+          : <Box style={imageStyle} component="img" height={100} src="profile.jpg" />}
+      </Grid>
+      <Grid item xs={12}>
+        <Round number={number} stations={stations} />
+      </Grid>
+      {stations.length > 0 && (
+        <Grid item xs={12}>
+          <Button
+            startIcon={<QueueIcon />}
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              addRoundToNet(stations);
+              stationsDispatch({ type: STATIONS.RESET });
+              resetStationForm();
+            }}
+            size="small"
+          >
+            Round
+          </Button>
+        </Grid>
+      )}
     </Grid>
   );
 };

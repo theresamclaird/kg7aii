@@ -23,6 +23,7 @@ export default ({ station }) => {
         <TableCell>{station.mobile && <>🚗</>}</TableCell>
         <TableCell>{station.internet && <>🌐</>}</TableCell>
         <TableCell>{station.recheck && <>📢</>}</TableCell>
+        <TableCell>{station.image && <img height={40} src={station.image} />}</TableCell>
         <TableCell>
           <IconButton
             onClick={() => console.log("todo: delete station")}
@@ -34,7 +35,7 @@ export default ({ station }) => {
       </TableRow>
       {showNotes && (
         <TableRow key={`${station.guid}-notes`}>
-          <TableCell colSpan={9} fullWidth={true}>
+          <TableCell colSpan={11} fullWidth={true}>
             <TextField
               label={`📝 ${station.callsign}`}
               fullWidth

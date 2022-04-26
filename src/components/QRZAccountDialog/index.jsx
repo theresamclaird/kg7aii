@@ -9,7 +9,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { QRZSessionContext } from "../QRZSession";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-export default ({ open, handleClose }) => {
+const QrzAccountDialog = ({ open, handleClose }) => {
   const { loading, error, setCredentials } = useContext(QRZSessionContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -61,3 +61,5 @@ export default ({ open, handleClose }) => {
     </Dialog>
   );
 };
+
+export default QrzAccountDialog;
