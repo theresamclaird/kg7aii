@@ -114,13 +114,6 @@ export const QRZSessionProvider = ({ children }) => {
     }
   }, [credentials]);
 
-  const cacheStation = (station) => {
-    console.log("cacheStation", station);
-    let newCachedStations = cloneObject(cachedStations);
-    newCachedStations[station.callsign] = station;
-    setCachedStations(newCachedStations);
-  };
-
   const sessionKey = state.sessionKey;
   const lookupCallsign = async (callsign) => {
     console.log("lookupCallsign", callsign);
@@ -209,7 +202,7 @@ export const QRZSessionProvider = ({ children }) => {
 
   return (
     <QRZSessionContext.Provider
-      value={{ ...state, setCredentials, lookupCallsign, cacheStation }}
+      value={{ ...state, setCredentials, lookupCallsign }}
     >
       {children}
     </QRZSessionContext.Provider>

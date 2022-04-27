@@ -3,6 +3,10 @@ import { Box, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import Round from "../Round";
 import Paper from "@material-ui/core/Paper";
 import QueueIcon from "@material-ui/icons/Queue";
@@ -13,12 +17,16 @@ import validateCallsign from "../../utils/validateCallsign";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import { Satellite } from "@material-ui/icons";
 
 const initialStation = {
   timestamp: null,
   callsign: "",
   name: "",
   location: "",
+  handle: "",
+  qth: "",
+  cm: 5,
   inAndOut: false,
   mobile: false,
   internet: false,
@@ -29,8 +37,9 @@ const initialStation = {
 const STATION = {
   SET: "SET",
   CALLSIGN: "CALLSIGN",
-  NAME: "NAME",
-  LOCATION: "LOCATION",
+  HANDLE: "HANDLE",
+  QTH: "QTH",
+  CM: "CM",
   INANDOUT: "INANDOUT",
   MOBILE: "MOBILE",
   INTERNET: "INTERNET",
@@ -46,10 +55,12 @@ const stationReducer = (state, action) => {
       return { ...state, ...action.payload };
     case STATION.CALLSIGN:
       return { ...state, callsign: action.payload };
-    case STATION.NAME:
-      return { ...state, name: action.payload };
-    case STATION.LOCATION:
-      return { ...state, location: action.payload };
+    case STATION.HANDLE:
+      return { ...state, handle: action.payload };
+    case STATION.QTH:
+      return { ...state, qth: action.payload };
+    case STATION.CM:
+      return { ...state, cm: action.payload };
     case STATION.INANDOUT:
       return { ...state, inAndOut: action.payload };
     case STATION.MOBILE:
@@ -86,7 +97,7 @@ const stationsReducer = (state, action) => {
 };
 
 export default ({ number, addRoundToNet }) => {
-  const { lookupCallsign, cacheStation } = useContext(QRZSessionContext);
+  const { lookupCallsign } = useContext(QRZSessionContext);
   const [station, stationDispatch] = useReducer(stationReducer, initialStation);
   const [stations, stationsDispatch] = useReducer(stationsReducer, []);
   const callsignRef = useRef(null);
@@ -97,7 +108,6 @@ export default ({ number, addRoundToNet }) => {
   };
 
   const addStationToRound = () => {
-    cacheStation(station);
     stationsDispatch({ type: STATIONS.ADD, payload: station });
     resetStationForm();
   };
@@ -108,26 +118,32 @@ export default ({ number, addRoundToNet }) => {
     }
   };
 
-  const imageStyle = {
-    maxWidth: "100%",
-    maxHeight: "100px",
-    width: "auto",
-    height: "auto",
-    objectFit: "contain",
-    float: "right",
-  };
-  
+  const stationImage = (
+    <Box
+      component="img"
+      style={{
+        maxWidth: "100%",
+        maxHeight: "150px",
+        width: "auto",
+        height: "auto",
+        objectFit: "contain",
+        float: "right",
+      }}
+      src={station?.image || "profile.jpg"}
+    />
+  );
+
   return (
     <Grid
       item
       container
       justify="space-between"
       xs={12}
-      spacing={2}
+      spacing={3}
       component={Paper}
     >
       <Grid item container xs={10} spacing={2}>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <TextField
             autoFocus
             fullWidth={true}
@@ -162,16 +178,46 @@ export default ({ number, addRoundToNet }) => {
             }}
           />
         </Grid>
-        <Grid item xs={9}><Typography variant="body2">{station.name}<br />{station.location}</Typography></Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
+          <Typography variant="body2">{station.name}<br />{station.location}</Typography>
+        </Grid>
+        <Grid item xs={5}>
           <TextField
             fullWidth={true}
-            label="Preferred Name"
-            value={station.name}
+            label="Handle"
+            value={station.handle}
             variant="outlined"
             size="small"
-            onChange={(e) => {}}
+            onKeyPress={handleKeyPress}
+            onChange={(e) => stationDispatch({ type: STATION.HANDLE, payload: e.target.value })}
           />
+        </Grid>
+        <Grid item xs={5}>
+          <TextField
+            fullWidth={true}
+            label="QTH"
+            value={station.qth}
+            variant="outlined"
+            size="small"
+            onKeyPress={handleKeyPress}
+            onChange={(e) => stationDispatch({ type: STATION.QTH, payload: e.target.value })}
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <FormControl variant="standard" style={{ m: 1, minWidth: 120 }}>
+            <InputLabel>CM</InputLabel>
+            <Select
+              value={station.cm}
+              label="CM"
+              onChange={(e) => {}}
+            >
+              <MenuItem value={5}>Excellent</MenuItem>
+              <MenuItem value={4}>Good</MenuItem>
+              <MenuItem value={3}>Fair</MenuItem>
+              <MenuItem value={2}>Poor</MenuItem>
+              <MenuItem value={1}>Unsatisfactory</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={10}>
           <FormGroup row>
@@ -259,9 +305,7 @@ export default ({ number, addRoundToNet }) => {
         </Grid>
       </Grid>
       <Grid item xs={2}>
-        {station.image 
-          ? <Box style={imageStyle} component="img" height={100} src={station.image} />
-          : <Box style={imageStyle} component="img" height={100} src="profile.jpg" />}
+        {stationImage}
       </Grid>
       <Grid item xs={12}>
         <Round number={number} stations={stations} />
