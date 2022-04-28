@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useReducer } from "react";
+import React, { useRef, useContext, useReducer, useState, Profiler } from "react";
 import { Box, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -13,11 +13,10 @@ import QueueIcon from "@material-ui/icons/Queue";
 import { v4 } from "uuid";
 import { QRZSessionContext } from "../QRZSession";
 import validateCallsign from "../../utils/validateCallsign";
-
+import ImageModal from "../ImageModal";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { Satellite } from "@material-ui/icons";
 
 const initialStation = {
   timestamp: null,
@@ -26,7 +25,7 @@ const initialStation = {
   location: "",
   handle: "",
   qth: "",
-  cm: 5,
+  cm: 0,
   inAndOut: false,
   mobile: false,
   internet: false,
@@ -101,6 +100,7 @@ export default ({ number, addRoundToNet }) => {
   const [station, stationDispatch] = useReducer(stationReducer, initialStation);
   const [stations, stationsDispatch] = useReducer(stationsReducer, []);
   const callsignRef = useRef(null);
+  const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
 
   const resetStationForm = () => {
     stationDispatch({ type: STATION.RESET });
@@ -118,21 +118,6 @@ export default ({ number, addRoundToNet }) => {
     }
   };
 
-  const stationImage = (
-    <Box
-      component="img"
-      style={{
-        maxWidth: "100%",
-        maxHeight: "150px",
-        width: "auto",
-        height: "auto",
-        objectFit: "contain",
-        float: "right",
-      }}
-      src={station?.image || "profile.jpg"}
-    />
-  );
-
   return (
     <Grid
       item
@@ -142,8 +127,8 @@ export default ({ number, addRoundToNet }) => {
       spacing={3}
       component={Paper}
     >
-      <Grid item container xs={10} spacing={2}>
-        <Grid item xs={2}>
+      <Grid item container xs={12} sm={9} spacing={2}>
+        <Grid item xs={12} sm={2}>
           <TextField
             autoFocus
             fullWidth={true}
@@ -178,10 +163,10 @@ export default ({ number, addRoundToNet }) => {
             }}
           />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12} sm={10}>
           <Typography variant="body2">{station.name}<br />{station.location}</Typography>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} sm={5}>
           <TextField
             fullWidth={true}
             label="Handle"
@@ -192,7 +177,7 @@ export default ({ number, addRoundToNet }) => {
             onChange={(e) => stationDispatch({ type: STATION.HANDLE, payload: e.target.value })}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} sm={5}>
           <TextField
             fullWidth={true}
             label="QTH"
@@ -203,23 +188,9 @@ export default ({ number, addRoundToNet }) => {
             onChange={(e) => stationDispatch({ type: STATION.QTH, payload: e.target.value })}
           />
         </Grid>
-        <Grid item xs={2}>
-          <FormControl variant="standard" style={{ m: 1, minWidth: 120 }}>
-            <InputLabel>CM</InputLabel>
-            <Select
-              value={station.cm}
-              label="CM"
-              onChange={(e) => {}}
-            >
-              <MenuItem value={5}>Excellent</MenuItem>
-              <MenuItem value={4}>Good</MenuItem>
-              <MenuItem value={3}>Fair</MenuItem>
-              <MenuItem value={2}>Poor</MenuItem>
-              <MenuItem value={1}>Unsatisfactory</MenuItem>
-            </Select>
-          </FormControl>
+        <Grid item xs={12} sm={2}>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={8}>
           <FormGroup row>
             <FormControlLabel
               control={
@@ -291,9 +262,25 @@ export default ({ number, addRoundToNet }) => {
             />
           </FormGroup>
         </Grid>
+        <Grid item xs={4}>
+          <FormControl variant="standard" style={{ m: 1, minWidth: 120 }}>
+            <InputLabel>CM</InputLabel>
+            <Select
+              value={station.cm}
+              label="CM"
+              onChange={(e) => {}}
+            >
+              <MenuItem value={0}>Not Reported</MenuItem>
+              <MenuItem value={5}>Excellent</MenuItem>
+              <MenuItem value={4}>Good</MenuItem>
+              <MenuItem value={3}>Fair</MenuItem>
+              <MenuItem value={2}>Poor</MenuItem>
+              <MenuItem value={1}>Unsatisfactory</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
         <Grid item xs={2}>
           <Button
-            style={{ float: "right" }}
             startIcon={<QueueIcon />}
             variant="contained"
             color="primary"
@@ -304,8 +291,35 @@ export default ({ number, addRoundToNet }) => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs={2}>
-        {stationImage}
+      <Grid item xs={12} sm={3} spacing={2}>
+        {station?.image && <Box
+          onClick={() => setOpenProfileImageModal(true)}
+          component="img"
+          style={{
+            border: 'solid 2px black',
+            cursor: 'pointer',
+            maxWidth: "100%",
+            maxHeight: "200px",
+            width: "auto",
+            height: "auto",
+            objectFit: "contain",
+            float: 'right',
+          }}
+          src={station.image}
+        />}
+        <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+          <Box
+            component="img"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100vh",
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+            }}
+            src={station.image}
+          />
+        </ImageModal>
       </Grid>
       <Grid item xs={12}>
         <Round number={number} stations={stations} />
