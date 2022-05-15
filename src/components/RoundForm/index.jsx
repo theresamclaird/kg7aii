@@ -161,7 +161,7 @@ export default ({ number, addRoundToNet }) => {
               }}
             />
           </Grid>
-          <Grid item xs={6}> {/* handle field */}
+          <Grid item xs={12} sm={6}> {/* handle field */}
             <TextField
               fullWidth={true}
               label="Handle"
@@ -172,7 +172,7 @@ export default ({ number, addRoundToNet }) => {
               onChange={(e) => stationDispatch({ type: STATION.HANDLE, payload: e.target.value })}
             />
           </Grid>
-          <Grid item xs={6}> {/* qth field */}
+          <Grid item xs={12} sm={6}> {/* qth field */}
             <TextField
               fullWidth={true}
               label="QTH"
