@@ -127,201 +127,174 @@ export default ({ number, addRoundToNet }) => {
       spacing={3}
       component={Paper}
     >
-      <Grid item container xs={12} sm={9} spacing={2}>
-        <Grid item xs={12} sm={2}>
-          <TextField
-            autoFocus
-            fullWidth={true}
-            label="callsign"
-            value={station.callsign}
-            inputRef={callsignRef}
-            variant="outlined"
-            size="small"
-            onKeyPress={handleKeyPress}
-            onChange={(e) => {
-              const callsign = e.target.value;
-
-              stationDispatch({
-                type: STATION.CALLSIGN,
-                payload: callsign
-              });
-
-              if (validateCallsign(callsign)) {
-                lookupCallsign(callsign).then((station) =>
-                  stationDispatch({
-                    type: STATION.SET,
-                    payload: {
-                      name: station.name,
-                      location: station.location,
-                      image: station.image,
-                    }
-                  })
-                );
-              } else {
-                stationDispatch({ type: STATION.CLEAR });
-              }
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={10}>
-          <Typography variant="body2">{station.name}<br />{station.location}</Typography>
-        </Grid>
-        <Grid item xs={12} sm={5}>
-          <TextField
-            fullWidth={true}
-            label="Handle"
-            value={station.handle}
-            variant="outlined"
-            size="small"
-            onKeyPress={handleKeyPress}
-            onChange={(e) => stationDispatch({ type: STATION.HANDLE, payload: e.target.value })}
-          />
-        </Grid>
-        <Grid item xs={12} sm={5}>
-          <TextField
-            fullWidth={true}
-            label="QTH"
-            value={station.qth}
-            variant="outlined"
-            size="small"
-            onKeyPress={handleKeyPress}
-            onChange={(e) => stationDispatch({ type: STATION.QTH, payload: e.target.value })}
-          />
-        </Grid>
-        <Grid item xs={12} sm={2}>
-        </Grid>
-        <Grid item xs={8}>
-          <FormGroup row>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={station.inAndOut}
-                  onChange={(e) => {
+      <Grid item xs={6}>
+        <Grid container xs={12} spacing={2}>
+          <Grid item xs={12}> {/* callsign field */}
+            <TextField
+              autoFocus
+              label="callsign"
+              value={station.callsign}
+              inputRef={callsignRef}
+              variant="outlined"
+              size="small"
+              onKeyPress={handleKeyPress}
+              onChange={(e) => {
+                const callsign = e.target.value;
+                stationDispatch({
+                  type: STATION.CALLSIGN,
+                  payload: callsign
+                });
+                if (validateCallsign(callsign)) {
+                  lookupCallsign(callsign).then((station) =>
                     stationDispatch({
-                      type: STATION.INANDOUT,
-                      payload: e.target.checked
-                    });
-                  }}
-                  onKeyPress={handleKeyPress}
-                  name="inAndOut"
-                  color="primary"
-                />
-              }
-              label="In/Out"
+                      type: STATION.SET,
+                      payload: {
+                        name: station.name,
+                        location: station.location,
+                        image: station.image,
+                      }
+                    })
+                  );
+                } else {
+                  stationDispatch({ type: STATION.CLEAR });
+                }
+              }}
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={station.mobile}
-                  onChange={(e) => {
-                    stationDispatch({
-                      type: STATION.MOBILE,
-                      payload: e.target.checked
-                    });
-                  }}
-                  onKeyPress={handleKeyPress}
-                  name="mobile"
-                  color="primary"
-                />
-              }
-              label="Mobile"
+          </Grid>
+          <Grid item xs={6}> {/* handle field */}
+            <TextField
+              fullWidth={true}
+              label="Handle"
+              value={station.handle}
+              variant="outlined"
+              size="small"
+              onKeyPress={handleKeyPress}
+              onChange={(e) => stationDispatch({ type: STATION.HANDLE, payload: e.target.value })}
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={station.internet}
-                  onChange={(e) => {
-                    stationDispatch({
-                      type: STATION.INTERNET,
-                      payload: e.target.checked
-                    });
-                  }}
-                  onKeyPress={handleKeyPress}
-                  name="internet"
-                  color="primary"
-                />
-              }
-              label="Internet"
+          </Grid>
+          <Grid item xs={6}> {/* qth field */}
+            <TextField
+              fullWidth={true}
+              label="QTH"
+              value={station.qth}
+              variant="outlined"
+              size="small"
+              onKeyPress={handleKeyPress}
+              onChange={(e) => stationDispatch({ type: STATION.QTH, payload: e.target.value })}
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={station.recheck}
-                  onChange={(e) => {
-                    stationDispatch({
-                      type: STATION.RECHECK,
-                      payload: e.target.checked
-                    });
-                  }}
-                  onKeyPress={handleKeyPress}
-                  name="recheck"
-                  color="primary"
-                />
-              }
-              label="Recheck"
-            />
-          </FormGroup>
-        </Grid>
-        <Grid item xs={4}>
-          <FormControl variant="standard" style={{ m: 1, minWidth: 120 }}>
-            <InputLabel>CM</InputLabel>
-            <Select
-              value={station.cm}
-              label="CM"
-              onChange={(e) => {}}
-            >
-              <MenuItem value={0}>Not Reported</MenuItem>
-              <MenuItem value={5}>Excellent</MenuItem>
-              <MenuItem value={4}>Good</MenuItem>
-              <MenuItem value={3}>Fair</MenuItem>
-              <MenuItem value={2}>Poor</MenuItem>
-              <MenuItem value={1}>Unsatisfactory</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={2}>
-          <Button
-            startIcon={<QueueIcon />}
-            variant="contained"
-            color="primary"
-            onClick={addStationToRound}
-            size="small"
-          >
-            Station
-          </Button>
+          </Grid>
+          <Grid item xs={12}> {/* status fields */}
+            <FormGroup row>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={station.inAndOut}
+                    onChange={(e) => {
+                      stationDispatch({
+                        type: STATION.INANDOUT,
+                        payload: e.target.checked
+                      });
+                    }}
+                    onKeyPress={handleKeyPress}
+                    name="inAndOut"
+                    color="primary"
+                  />
+                }
+                label="In/Out"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={station.mobile}
+                    onChange={(e) => {
+                      stationDispatch({
+                        type: STATION.MOBILE,
+                        payload: e.target.checked
+                      });
+                    }}
+                    onKeyPress={handleKeyPress}
+                    name="mobile"
+                    color="primary"
+                  />
+                }
+                label="Mobile"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={station.internet}
+                    onChange={(e) => {
+                      stationDispatch({
+                        type: STATION.INTERNET,
+                        payload: e.target.checked
+                      });
+                    }}
+                    onKeyPress={handleKeyPress}
+                    name="internet"
+                    color="primary"
+                  />
+                }
+                label="Internet"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={station.recheck}
+                    onChange={(e) => {
+                      stationDispatch({
+                        type: STATION.RECHECK,
+                        payload: e.target.checked
+                      });
+                    }}
+                    onKeyPress={handleKeyPress}
+                    name="recheck"
+                    color="primary"
+                  />
+                }
+                label="Recheck"
+              />
+            </FormGroup>
+          </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12} sm={3} spacing={2}>
-        {station?.image && <Box
-          onClick={() => setOpenProfileImageModal(true)}
-          component="img"
-          style={{
-            border: 'solid 2px black',
-            cursor: 'pointer',
-            maxWidth: "100%",
-            maxHeight: "200px",
-            width: "auto",
-            height: "auto",
-            objectFit: "contain",
-            float: 'right',
-          }}
-          src={station.image}
-        />}
-        <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
-          <Box
-            component="img"
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100vh",
-              width: "auto",
-              height: "auto",
-              objectFit: "contain",
-            }}
-            src={station.image}
-          />
-        </ImageModal>
+      <Grid item xs={6}> {/* qrz data */}
+        <Grid container xs={12}>
+          <Grid item xs={6}> {/* text data */}
+            <Typography variant="body2">{station.name}<br />{station.location}</Typography>
+          </Grid>
+          <Grid item xs={6} style={{ height: '200px' }}> {/* image */}
+            {station?.image && <Box
+              onClick={() => setOpenProfileImageModal(true)}
+              component="img"
+              style={{
+                border: 'solid 2px black',
+                cursor: 'pointer',
+                maxWidth: "100%",
+                maxHeight: "200px",
+                width: "auto",
+                height: "auto",
+                objectFit: "contain",
+                float: 'right',
+              }}
+              src={station.image}
+            />}
+            <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+              <Box
+                component="img"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100vh",
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+                src={station.image}
+              />
+            </ImageModal>
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12}> {/* round */}
         <Round number={number} stations={stations} />
       </Grid>
       {stations.length > 0 && (
