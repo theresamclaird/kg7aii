@@ -266,7 +266,7 @@ export default ({ number, addRoundToNet }) => {
               {station.callsign && <a href={`https://www.qrz.com/db/${station.callsign}`} target="_blank">QRZ</a>}
             </Typography>
           </Grid>
-          <Grid item xs={6} style={{ height: '200px' }}> {/* image */}
+          <Grid item xs={6} style={{ height: '150px' }}> {/* image */}
             {station?.image && <Box
               onClick={() => setOpenProfileImageModal(true)}
               component="img"
@@ -274,7 +274,7 @@ export default ({ number, addRoundToNet }) => {
                 border: 'solid 2px black',
                 cursor: 'pointer',
                 maxWidth: "100%",
-                maxHeight: "200px",
+                maxHeight: "150px",
                 width: "auto",
                 height: "auto",
                 objectFit: "contain",
