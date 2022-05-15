@@ -260,7 +260,11 @@ export default ({ number, addRoundToNet }) => {
       <Grid item xs={6}> {/* qrz data */}
         <Grid container xs={12}>
           <Grid item xs={6}> {/* text data */}
-            <Typography variant="body2">{station.name}<br />{station.location}</Typography>
+            <Typography variant="body2">
+              {station.name}<br />
+              {station.location}<br />
+              {station.callsign && <a href={`https://www.qrz.com/db/${station.callsign}`} target="_blank">QRZ</a>}
+            </Typography>
           </Grid>
           <Grid item xs={6} style={{ height: '200px' }}> {/* image */}
             {station?.image && <Box
