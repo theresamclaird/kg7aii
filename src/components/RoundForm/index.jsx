@@ -171,7 +171,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                     color="primary"
                   />
                 }
-                label="I/O"
+                label="🔃"
               />
               <FormControlLabel
                 control={
@@ -188,7 +188,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                     color="primary"
                   />
                 }
-                label="Mobile"
+                label="🚗"
               />
               <FormControlLabel
                 control={
@@ -205,7 +205,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                     color="primary"
                   />
                 }
-                label="Recheck"
+                label="📢"
               />
             </FormGroup>
           </Grid>

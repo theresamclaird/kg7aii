@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default ({ items = [], removeItem = () => {} }) => {
+const NetsTable = ({ items = [], removeItem = () => {} }) => {
   const classes = useStyles();
 
   return (
@@ -57,3 +57,5 @@ export default ({ items = [], removeItem = () => {} }) => {
     </TableContainer>
   );
 };
+
+export default NetsTable;

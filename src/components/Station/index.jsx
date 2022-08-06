@@ -7,7 +7,7 @@ import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from "@material-ui/core/TextField";
 
-export default ({ station }) => {
+const Station = ({ station }) => {
   const [showNotes, setShowNotes] = useState(false);
 
   return (
@@ -53,3 +53,5 @@ export default ({ station }) => {
     </>
   );
 };
+
+export default Station;

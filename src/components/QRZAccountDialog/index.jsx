@@ -52,7 +52,10 @@ const QrzAccountDialog = ({ open, handleClose }) => {
           Cancel
         </Button>
         <Button
-          onClick={() => setCredentials({ username, password })}
+          onClick={() => {
+            setCredentials({ username, password });
+            handleClose();
+          }}
           color="primary"
         >
           Authenticate

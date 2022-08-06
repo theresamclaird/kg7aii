@@ -6,12 +6,10 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
 import Station from "../Station";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default ({ number, stations, allowHideStations = false }) => {
+const Round = ({ number, stations, allowHideStations = false }) => {
   const classes = useStyles();
   const [showStations, setShowStations] = useState(true);
 
@@ -60,3 +58,5 @@ export default ({ number, stations, allowHideStations = false }) => {
     </Grid>
   );
 };
+
+export default Round;
