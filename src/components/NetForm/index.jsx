@@ -3,7 +3,7 @@ import RoundForm from "../RoundForm";
 import Round from "../Round";
 import Grid from "@material-ui/core/Grid";
 
-export default ({ addItem }) => {
+const NetForm = ({ addItem }) => {
   const [rounds, setRounds] = useState([]);
 
   const addRoundToNet = (round) => {
@@ -36,3 +36,5 @@ export default ({ addItem }) => {
     </Grid>
   );
 };
+
+export default NetForm;

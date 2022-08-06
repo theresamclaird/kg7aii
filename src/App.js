@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import AppBar from "@material-ui/core/AppBar";
@@ -28,6 +28,19 @@ const useStyles = makeStyles((theme) => ({
 export default function App() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const timeRef = useRef();
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const day = Math.floor(diff / oneDay);
+        timeRef.current.innerText = `${now.toLocaleString()} (day ${day}, ${Math.floor(100 * day/365)}%)`;
+    }, 1000);
+    return () => clearInterval(intervalId);
+  });
 
   return (
     <PersistentItemsProvider localStorageKey="nets">
@@ -36,9 +49,7 @@ export default function App() {
           <Grid item xs={12}>
             <AppBar position="static">
               <Toolbar>
-                <Typography variant="h6" className={classes.title}>
-                  Net Log
-                </Typography>
+                <Typography variant="h6" className={classes.title} ref={timeRef} />
                 <IconButton
                   aria-label="account of current user"
                   aria-controls="menu-appbar"

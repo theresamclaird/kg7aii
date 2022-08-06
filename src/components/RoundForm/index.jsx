@@ -1,12 +1,8 @@
-import React, { useRef, useContext, useReducer, useState, Profiler } from "react";
+import React, { useRef, useContext, useReducer, useState, useEffect } from "react";
 import { Box, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import Round from "../Round";
 import Paper from "@material-ui/core/Paper";
 import QueueIcon from "@material-ui/icons/Queue";
@@ -17,6 +13,7 @@ import ImageModal from "../ImageModal";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import useDebounce from '../../hooks/useDebounce';
 
 const initialStation = {
   timestamp: null,
@@ -95,15 +92,32 @@ const stationsReducer = (state, action) => {
   }
 };
 
-export default ({ number, addRoundToNet }) => {
+const RoundForm = ({ number, addRoundToNet }) => {
   const { lookupCallsign } = useContext(QRZSessionContext);
   const [station, stationDispatch] = useReducer(stationReducer, initialStation);
   const [stations, stationsDispatch] = useReducer(stationsReducer, []);
   const callsignRef = useRef(null);
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
+  const [callsign, setCallsign] = useState('');
+
+  useDebounce(() => {
+    if (!validateCallsign(callsign)) {
+      return;
+    }
+
+    lookupCallsign(callsign).then(station => stationDispatch({
+      type: STATION.SET,
+      payload: {
+        name: station.name,
+        location: station.location,
+        image: station.image,
+      }
+    }));
+  }, 500, [callsign]);
 
   const resetStationForm = () => {
     stationDispatch({ type: STATION.RESET });
+    setCallsign('');
     callsignRef.current.focus();
   };
 
@@ -130,36 +144,70 @@ export default ({ number, addRoundToNet }) => {
       <Grid item xs={6}>
         <Grid container xs={12} spacing={2}>
           <Grid item xs={12}> {/* callsign field */}
-            <TextField
-              autoFocus
-              label="callsign"
-              value={station.callsign}
-              inputRef={callsignRef}
-              variant="outlined"
-              size="small"
-              onKeyPress={handleKeyPress}
-              onChange={(e) => {
-                const callsign = e.target.value;
-                stationDispatch({
-                  type: STATION.CALLSIGN,
-                  payload: callsign
-                });
-                if (validateCallsign(callsign)) {
-                  lookupCallsign(callsign).then((station) =>
-                    stationDispatch({
-                      type: STATION.SET,
-                      payload: {
-                        name: station.name,
-                        location: station.location,
-                        image: station.image,
-                      }
-                    })
-                  );
-                } else {
-                  stationDispatch({ type: STATION.CLEAR });
+            <FormGroup row>
+              <TextField
+                autoFocus
+                label="callsign"
+                value={callsign}
+                inputRef={callsignRef}
+                variant="outlined"
+                size="small"
+                onKeyPress={handleKeyPress}
+                onChange={e => setCallsign(e.target.value)}
+                style={{ marginRight: '1rem' }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={station.inAndOut}
+                    onChange={(e) => {
+                      stationDispatch({
+                        type: STATION.INANDOUT,
+                        payload: e.target.checked
+                      });
+                    }}
+                    onKeyPress={handleKeyPress}
+                    name="inAndOut"
+                    color="primary"
+                  />
                 }
-              }}
-            />
+                label="I/O"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={station.mobile}
+                    onChange={(e) => {
+                      stationDispatch({
+                        type: STATION.MOBILE,
+                        payload: e.target.checked
+                      });
+                    }}
+                    onKeyPress={handleKeyPress}
+                    name="mobile"
+                    color="primary"
+                  />
+                }
+                label="Mobile"
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={station.recheck}
+                    onChange={(e) => {
+                      stationDispatch({
+                        type: STATION.RECHECK,
+                        payload: e.target.checked
+                      });
+                    }}
+                    onKeyPress={handleKeyPress}
+                    name="recheck"
+                    color="primary"
+                  />
+                }
+                label="Recheck"
+              />
+            </FormGroup>
           </Grid>
           <Grid item xs={12} sm={6}> {/* handle field */}
             <TextField
@@ -182,78 +230,6 @@ export default ({ number, addRoundToNet }) => {
               onKeyPress={handleKeyPress}
               onChange={(e) => stationDispatch({ type: STATION.QTH, payload: e.target.value })}
             />
-          </Grid>
-          <Grid item xs={12}> {/* status fields */}
-            <FormGroup row>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={station.inAndOut}
-                    onChange={(e) => {
-                      stationDispatch({
-                        type: STATION.INANDOUT,
-                        payload: e.target.checked
-                      });
-                    }}
-                    onKeyPress={handleKeyPress}
-                    name="inAndOut"
-                    color="primary"
-                  />
-                }
-                label="In/Out"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={station.mobile}
-                    onChange={(e) => {
-                      stationDispatch({
-                        type: STATION.MOBILE,
-                        payload: e.target.checked
-                      });
-                    }}
-                    onKeyPress={handleKeyPress}
-                    name="mobile"
-                    color="primary"
-                  />
-                }
-                label="Mobile"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={station.internet}
-                    onChange={(e) => {
-                      stationDispatch({
-                        type: STATION.INTERNET,
-                        payload: e.target.checked
-                      });
-                    }}
-                    onKeyPress={handleKeyPress}
-                    name="internet"
-                    color="primary"
-                  />
-                }
-                label="Internet"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={station.recheck}
-                    onChange={(e) => {
-                      stationDispatch({
-                        type: STATION.RECHECK,
-                        payload: e.target.checked
-                      });
-                    }}
-                    onKeyPress={handleKeyPress}
-                    name="recheck"
-                    color="primary"
-                  />
-                }
-                label="Recheck"
-              />
-            </FormGroup>
           </Grid>
         </Grid>
       </Grid>
@@ -321,3 +297,5 @@ export default ({ number, addRoundToNet }) => {
     </Grid>
   );
 };
+
+export default RoundForm;

@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import NetForm from "../NetForm";
 import NetsTable from "../NetsTable";
 
-export default () => {
+const NetLogs = () => {
   const { items, addItem, removeItem } = useContext(PersistentItemsContext);
   return (
     <Grid container spacing={4} justify="space-around">
@@ -19,3 +19,5 @@ export default () => {
     </Grid>
   );
 };
+
+export default NetLogs;
