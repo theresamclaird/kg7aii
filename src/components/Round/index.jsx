@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Round = ({ number, stations, allowHideStations = false }) => {
+const Round = ({ number, stations, allowHideStations = false, removeStation }) => {
   const classes = useStyles();
   const [showStations, setShowStations] = useState(true);
 
@@ -47,8 +47,8 @@ const Round = ({ number, stations, allowHideStations = false }) => {
             </TableHead>
             {showStations && (
               <TableBody>
-                {stations.map((station) => (
-                  <Station station={station} />
+                {stations.map((station, index) => (
+                  <Station station={station} removeStation={() => removeStation(index)} />
                 ))}
               </TableBody>
             )}

@@ -78,11 +78,14 @@ const stationReducer = (state, action) => {
 
 const STATIONS = {
   ADD: "ADD",
-  RESET: "RESET"
+  RESET: "RESET",
+  REMOVE: "REMOVE",
 };
 
 const stationsReducer = (state, action) => {
   switch (action.type) {
+    case STATIONS.REMOVE:
+      return [...state].filter((station, index) => index !== action.payload.index);
     case STATIONS.ADD:
       return [...state, { guid: v4(), ...action.payload }];
     case STATIONS.RESET:
@@ -102,9 +105,12 @@ const RoundForm = ({ number, addRoundToNet }) => {
 
   useDebounce(() => {
     if (!validateCallsign(callsign)) {
+      stationDispatch({ type: STATION.RESET });
+      callsignRef.current.focus();
       return;
     }
 
+    stationDispatch({ type: STATION.CALLSIGN, payload: callsign });
     lookupCallsign(callsign).then(station => stationDispatch({
       type: STATION.SET,
       payload: {
@@ -142,7 +148,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
       component={Paper}
     >
       <Grid item xs={6}>
-        <Grid container xs={12} spacing={2}>
+        <Grid container spacing={2}>
           <Grid item xs={12}> {/* callsign field */}
             <FormGroup row>
               <TextField
@@ -156,6 +162,10 @@ const RoundForm = ({ number, addRoundToNet }) => {
                 onChange={e => setCallsign(e.target.value)}
                 style={{ marginRight: '1rem' }}
               />
+            </FormGroup>
+          </Grid>
+          <Grid item xs={12}>
+            <FormGroup row>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -209,32 +219,10 @@ const RoundForm = ({ number, addRoundToNet }) => {
               />
             </FormGroup>
           </Grid>
-          <Grid item xs={12} sm={6}> {/* handle field */}
-            <TextField
-              fullWidth={true}
-              label="Handle"
-              value={station.handle}
-              variant="outlined"
-              size="small"
-              onKeyPress={handleKeyPress}
-              onChange={(e) => stationDispatch({ type: STATION.HANDLE, payload: e.target.value })}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}> {/* qth field */}
-            <TextField
-              fullWidth={true}
-              label="QTH"
-              value={station.qth}
-              variant="outlined"
-              size="small"
-              onKeyPress={handleKeyPress}
-              onChange={(e) => stationDispatch({ type: STATION.QTH, payload: e.target.value })}
-            />
-          </Grid>
         </Grid>
       </Grid>
       <Grid item xs={6}> {/* qrz data */}
-        <Grid container xs={12}>
+        <Grid container>
           <Grid item xs={6}> {/* text data */}
             <Typography variant="body2">
               {station.name}<br />
@@ -275,7 +263,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
         </Grid>
       </Grid>
       <Grid item xs={12}> {/* round */}
-        <Round number={number} stations={stations} />
+        <Round number={number} stations={stations} removeStation={index => stationsDispatch({ type: STATIONS.REMOVE, payload: { index }})} />
       </Grid>
       {stations.length > 0 && (
         <Grid item xs={12}>

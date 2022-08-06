@@ -7,7 +7,7 @@ import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TextField from "@material-ui/core/TextField";
 
-const Station = ({ station }) => {
+const Station = ({ station, removeStation }) => {
   const [showNotes, setShowNotes] = useState(false);
 
   return (
@@ -16,7 +16,7 @@ const Station = ({ station }) => {
         <TableCell onClick={() => setShowNotes(!showNotes)}>
           {showNotes ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </TableCell>
-        <TableCell>{station.callsign}</TableCell>
+        <TableCell>{station.callsign.toUpperCase()}</TableCell>
         <TableCell>{station.name}</TableCell>
         <TableCell>{station.location}</TableCell>
         <TableCell>{station.inAndOut && <>🔃</>}</TableCell>
@@ -26,8 +26,8 @@ const Station = ({ station }) => {
         <TableCell>{station.image && <img height={40} src={station.image} />}</TableCell>
         <TableCell>
           <IconButton
-            onClick={() => console.log("todo: delete station")}
-            aria-label="delete"
+            onClick={removeStation}
+            aria-label="remove"
           >
             <DeleteIcon />
           </IconButton>

@@ -11,12 +11,8 @@ export default function App() {
     <PersistentItemsProvider localStorageKey="nets">
       <QRZSessionProvider>
         <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <StatusBar />
-          </Grid>
-          <Grid item xs={12}>
-            <Netlogs />
-          </Grid>
+          <Grid item xs={12}><StatusBar /></Grid>
+          <Grid item xs={12}><Netlogs /></Grid>
         </Grid>
       </QRZSessionProvider>
     </PersistentItemsProvider>
