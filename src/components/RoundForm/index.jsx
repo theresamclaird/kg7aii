@@ -97,12 +97,16 @@ const RoundForm = ({ number, addRoundToNet }) => {
   };
 
   const addStationToRound = () => {
-    stationsDispatch({ type: STATIONS.ADD, payload: station });
+    stationsDispatch({ type: STATIONS.ADD, payload: { ...station, callsign } });
     resetStationForm();
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
+      if (!validateCallsign(callsign)) {
+        return;
+      }
+
       addStationToRound();
     }
   };
