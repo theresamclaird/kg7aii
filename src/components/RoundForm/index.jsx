@@ -88,7 +88,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
         payload: qrzData,
       });
     });
-  }, 500, [callsign]);
+  }, 250, [callsign]);
 
   const resetStationForm = () => {
     stationDispatch({ type: STATION.RESET });
