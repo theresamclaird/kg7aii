@@ -1,13 +1,7 @@
 import React, { createContext, useEffect, useReducer } from "react";
-import {
-  useLocalStorage,
-  useSessionStorage
-} from "../../hooks/useBrowserStorage";
+import { useLocalStorage } from "../../hooks/useBrowserStorage";
 import axios from "axios";
 import { xml2js } from "xml-js";
-import cloneObject from "../../utils/cloneObject";
-
-// todo: Clean this up. (see: requestQrzData)
 
 export const QRZSessionContext = createContext({ key: "" });
 
@@ -48,11 +42,6 @@ export const QRZSessionProvider = ({ children }) => {
     username: "",
     password: ""
   });
-  const [cachedStations, setCachedStations] = useLocalStorage("stations", {});
-  const [sessionStations, setSessionStations] = useSessionStorage(
-    "stations",
-    {}
-  );
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     error: null,
@@ -60,7 +49,6 @@ export const QRZSessionProvider = ({ children }) => {
   });
 
   const requestQrzData = async (queryStringParameters) => {
-    console.log("requestQrzDatra", queryStringParameters);
     let queryString = "";
     for (const [key, value] of Object.entries(queryStringParameters)) {
       queryString += `${key}=${value};`;
@@ -86,7 +74,6 @@ export const QRZSessionProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("qrz credentials changed", credentials);
     try {
       axios
         .get(
@@ -115,30 +102,10 @@ export const QRZSessionProvider = ({ children }) => {
   }, [credentials]);
 
   const sessionKey = state.sessionKey;
+
   const lookupCallsign = async (callsign) => {
-    console.log("lookupCallsign", callsign);
-    let result = {
-      callsign: callsign.toLowerCase(),
-      name: "",
-      location: "",
-      qrz: {}
-    };
-
-    const cachedStation = cachedStations[result.callsign];
-    if (cachedStation) {
-      console.log("cached station found", cachedStation);
-      return cachedStation;
-    }
-
-    const sessionStation = sessionStations[result.callsign];
-    if (sessionStation) {
-      console.log("session station found", sessionStation);
-      return sessionStation;
-    }
-
     if (!sessionKey) {
-      console.log("no session key");
-      return result;
+      return;
     }
 
     const qrzResponse = await requestQrzData({
@@ -146,64 +113,16 @@ export const QRZSessionProvider = ({ children }) => {
       callsign
     });
 
-    console.log("qrzResponse", qrzResponse);
-
     const station = qrzResponse?.Callsign;
     if (!station) {
-      console.log("station not found", result);
-      let newSessionStations = cloneObject(sessionStations);
-      newSessionStations[result.callsign] = result;
-      setSessionStations(newSessionStations);
-      return result;
+      return;
     }
 
-    const qrzStation = normalizeQrzStationData(station);
-    result.qrz = qrzStation;
-
-    if (qrzStation?.name_fmt) {
-      result.name = qrzStation?.name_fmt;
-    } else {
-      const firstName = qrzStation?.fname;
-      const lastName = qrzStation?.name;
-      if (firstName && lastName) {
-        result.name = `${firstName} ${lastName}`;
-      } else if (firstName) {
-        result.name = firstName;
-      } else if (lastName) {
-        result.name = lastName;
-      }
-    }
-
-    const city = qrzStation?.addr2;
-    const state = qrzStation?.state;
-    if (city && state) {
-      result.location = `${city}, ${state}`;
-    } else if (city) {
-      result.location = city;
-    } else if (state) {
-      result.location = state;
-    } else if (qrzStation?.country) {
-      result.location = qrzStation?.country;
-    }
-
-    if (qrzStation?.image) {
-      console.log('image: ', qrzStation.image);
-      result.image = qrzStation.image;
-    }
-
-    let newSessionStations = cloneObject(sessionStations);
-    newSessionStations[result.callsign] = result;
-    setSessionStations(newSessionStations);
-
-    console.log("lookupCallsign", result);
-
-    return result;
+    return normalizeQrzStationData(station);
   };
 
   return (
-    <QRZSessionContext.Provider
-      value={{ ...state, setCredentials, lookupCallsign }}
-    >
+    <QRZSessionContext.Provider value={{ ...state, setCredentials, lookupCallsign }}>
       {children}
     </QRZSessionContext.Provider>
   );

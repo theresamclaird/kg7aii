@@ -1,56 +1,71 @@
 import React, { useState } from "react";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
+import { Box } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import TextField from "@material-ui/core/TextField";
+import ImageModal from '../ImageModal';
 
-const Station = ({ station, removeStation }) => {
-  const [showNotes, setShowNotes] = useState(false);
-
+const Station = ({ station, removeStation, style }) => {
+  const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
   return (
-    <>
-      <TableRow key={station.guid}>
-        <TableCell onClick={() => setShowNotes(!showNotes)}>
-          {showNotes ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        </TableCell>
-        <TableCell>{station.callsign.toUpperCase()}</TableCell>
-        <TableCell>{station.name}</TableCell>
-        <TableCell>{station.location}</TableCell>
-        <TableCell>{station.inAndOut && <>🔃</>}</TableCell>
-        <TableCell>{station.mobile && <>🚗</>}</TableCell>
-        <TableCell>{station.internet && <>🌐</>}</TableCell>
-        <TableCell>{station.recheck && <>📢</>}</TableCell>
-        <TableCell>{station.image && <img height={40} src={station.image} />}</TableCell>
-        <TableCell>
-          <IconButton
-            onClick={removeStation}
-            aria-label="remove"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      {showNotes && (
-        <TableRow key={`${station.guid}-notes`}>
-          <TableCell colSpan={11} fullWidth={true}>
-            <TextField
-              label={`📝 ${station.callsign}`}
-              fullWidth
-              multiline
-              margin="normal"
-              rowsMax={10}
-              InputLabelProps={{
-                shrink: true
+    <Box style={{
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      gap: '1rem', 
+      margin: '0.25rem 0.5rem',
+      ...style
+    }}>
+      <Box style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        gap: '1rem',
+        minWidth: '12rem',
+      }}>
+        <Typography style={{ minWidth: '5rem' }}>{station.callsign.toUpperCase()}</Typography>
+        <Typography>{station.inAndOut && <>🔃</>}</Typography>
+        <Typography>{station.mobile && <>🚗</>}</Typography>
+      </Box>
+      <Typography style={{ flex: 1 }}>{station?.qrz?.name_fmt}</Typography>
+      {station?.qrz?.image && (
+        <>
+          <Box
+            onClick={() => setOpenProfileImageModal(true)}
+            component="img"
+            style={{
+              cursor: 'pointer',
+              maxHeight: "2rem",
+              objectFit: "contain",
+              float: 'right',
+            }}
+            src={station?.qrz?.image}
+          />
+          <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+            <Box
+              component="img"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100vh",
+                width: "auto",
+                height: "auto",
+                objectFit: "contain",
               }}
-              variant="filled"
+              src={station?.qrz?.image}
             />
-          </TableCell>
-        </TableRow>
+          </ImageModal>
+        </>
       )}
-    </>
+      <Typography>
+        <IconButton
+          onClick={removeStation}
+          aria-label="remove"
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Typography>
+    </Box>
   );
 };
 
