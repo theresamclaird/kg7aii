@@ -25,7 +25,7 @@ const Station = ({ station, removeStation, style }) => {
         minWidth: '12rem',
       }}>
         <Typography style={{ minWidth: '5rem' }}>{station.callsign.toUpperCase()}</Typography>
-        <Typography>{station.inAndOut && <>🔃</>}</Typography>
+        <Typography>{station.inAndOut && <>↩️</>}</Typography>
         <Typography>{station.mobile && <>🚗</>}</Typography>
       </Box>
       <Typography style={{ flex: 1 }}>{station?.qrz?.name_fmt}</Typography>

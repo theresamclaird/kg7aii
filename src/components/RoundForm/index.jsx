@@ -155,7 +155,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                   color="primary"
                 />
               }
-              label="🔃"
+              label="↩️"
             />
             <FormControlLabel
               control={
