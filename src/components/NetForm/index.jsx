@@ -14,8 +14,14 @@ const NetForm = () => {
     if (index !== roundIndex) {
       return round;
     }
-
     return round.filter((station, index) => index !== stationIndex);
+  }));
+
+  const updateStationInRound = (stationData, roundIndex, stationIndex) => setRounds(rounds.map((round, index) => {
+    if (index !== roundIndex) {
+      return round;
+    }
+    return round.map((station, index) => index === stationIndex ? { ...station, ...stationData } : station);
   }));
 
   return (
@@ -34,6 +40,7 @@ const NetForm = () => {
             number={roundIndex + 1}
             stations={stations}
             removeStation={stationIndex => removeStationFromRound(roundIndex, stationIndex)}
+            updateStation={(stationData, stationIndex) => updateStationInRound(stationData, roundIndex, stationIndex)}
           />
         ))}
       </Box>

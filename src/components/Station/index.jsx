@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Box } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@mui/material/IconButton";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import ImageModal from '../ImageModal';
 
-const Station = ({ station, removeStation, style }) => {
+const Station = ({ station, removeStation, updateStation, style }) => {
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
   return (
     <Box style={{
@@ -21,12 +23,33 @@ const Station = ({ station, removeStation, style }) => {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
+        alignItems: 'center',
         gap: '1rem',
         minWidth: '12rem',
       }}>
         <Typography style={{ minWidth: '5rem' }}>{station.callsign.toUpperCase()}</Typography>
-        <Typography>{station.inAndOut && <>↩️</>}</Typography>
-        <Typography>{station.mobile && <>🚗</>}</Typography>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={station.inAndOut}
+              onChange={e => updateStation({ inAndOut: e.target.checked })}
+              name="inAndOut"
+              color="primary"
+            />
+          }
+          label="↩️"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={station.mobile}
+              onChange={e => updateStation({ mobile: e.target.checked })}
+              name="mobile"
+              color="primary"
+            />
+          }
+          label="🚗"
+        />
       </Box>
       <Typography style={{ flex: 1 }}>{station?.qrz?.name_fmt}</Typography>
       {station?.qrz?.image && (

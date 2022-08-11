@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Round = ({ number, stations, allowHideStations = false, removeStation }) => {
+const Round = ({ number, stations, allowHideStations = false, removeStation, updateStation }) => {
   const classes = useStyles();
   const [showStations, setShowStations] = useState(true);
 
@@ -47,6 +47,7 @@ const Round = ({ number, stations, allowHideStations = false, removeStation }) =
               key={station.guid}
               station={station}
               removeStation={() => removeStation(index)}
+              updateStation={stationData => updateStation(stationData, index)}
             />
         ))}
       </Grid>

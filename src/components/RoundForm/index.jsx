@@ -51,6 +51,7 @@ const STATIONS = {
   ADD: "ADD",
   RESET: "RESET",
   REMOVE: "REMOVE",
+  UPDATE: "UPDATE",
 };
 
 const stationsReducer = (stations, action) => {
@@ -61,6 +62,8 @@ const stationsReducer = (stations, action) => {
       return [...stations, { guid: v4(), ...action.payload }];
     case STATIONS.RESET:
       return [];
+    case STATIONS.UPDATE:
+      return stations.map((station, index) => index === action.payload.index ? { ...station, ...action.payload.stationData } : station);
     default:
       return stations;
   }
@@ -241,7 +244,9 @@ const RoundForm = ({ number, addRoundToNet }) => {
         <Round
           number={number}
           stations={stations}
-          removeStation={index => stationsDispatch({ type: STATIONS.REMOVE, payload: { index }})} />
+          removeStation={index => stationsDispatch({ type: STATIONS.REMOVE, payload: { index }})}
+          updateStation={(stationData, index) => stationsDispatch({ type: STATIONS.UPDATE, payload: { stationData, index }})}
+        />
       </Grid>
       {stations.length > 0 && (
         <Grid item container xs={12}>
