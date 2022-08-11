@@ -53,9 +53,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
       </Box>
       <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
         <Box>{station?.qrz?.name_fmt}</Box>
-        <Box>{station.qrz?.addr2}</Box>
-        <Box>{station.qrz?.state}</Box>
-        <Box>{station.qrz?.country}</Box>
+        <Box>{`${station.qrz?.addr2}, ${station.qrz?.state}`}</Box>
         <Box>{`(${station?.qrz?.timezone})`}</Box>
       </Typography>
       {station?.qrz?.image && (
