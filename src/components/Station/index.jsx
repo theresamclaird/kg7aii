@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box } from "@material-ui/core";
 import Typography from "@mui/material/Typography";
-import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -51,7 +51,13 @@ const Station = ({ station, removeStation, updateStation, style }) => {
           label="🚗"
         />
       </Box>
-      <Typography style={{ flex: 1 }}>{station?.qrz?.name_fmt}</Typography>
+      <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
+        <Box>{station?.qrz?.name_fmt}</Box>
+        <Box>{station.qrz?.addr2}</Box>
+        <Box>{station.qrz?.state}</Box>
+        <Box>{station.qrz?.country}</Box>
+        <Box>{`(${station?.qrz?.timezone})`}</Box>
+      </Typography>
       {station?.qrz?.image && (
         <>
           <Box
