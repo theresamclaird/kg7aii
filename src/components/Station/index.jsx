@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Box } from "@material-ui/core";
-import Typography from "@mui/material/Typography";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Link, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import { Check, Delete, DirectionsCar, Autorenew, OpenInNew } from '@mui/icons-material';
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ImageModal from '../ImageModal';
@@ -28,6 +28,17 @@ const Station = ({ station, removeStation, updateStation, style }) => {
         gap: '1rem',
         minWidth: '12rem',
       }}>
+        <FormControlLabel
+          label={<Check sx={{ verticalAlign: 'middle' }} />}
+          control={
+            <Checkbox
+              checked={station.reported}
+              onChange={e => updateStation({ reported: e.target.checked })}
+              name="reported"
+              color="primary"
+            />
+          }
+        />
         <Typography style={{ minWidth: '5rem' }}>{station.callsign.toUpperCase()}</Typography>
         <FormControlLabel
           control={
@@ -38,7 +49,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
               color="primary"
             />
           }
-          label="↩️"
+          label={<Autorenew sx={{ fontSize: '1rem', verticalAlign: 'middle' }} />}
         />
         <FormControlLabel
           control={
@@ -49,13 +60,19 @@ const Station = ({ station, removeStation, updateStation, style }) => {
               color="primary"
             />
           }
-          label="🚗"
+          label={<DirectionsCar sx={{ fontSize: '1rem', verticalAlign: 'middle' }} />}
         />
       </Box>
       <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
         {station?.qrz && (
           <>
-          <a href={`https://www.qrz.com/db/${station?.qrz?.call}`} target="_blank">QRZ</a>
+          <Link
+            href={`https://www.qrz.com/db/${station?.qrz?.call}`}
+            target="_blank"
+            sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
+          >
+            QRZ <OpenInNew sx={{ fontSize: '1rem', ml: 1 }} />
+          </Link>
           {`${station?.qrz?.name_fmt} (${station?.qrz?.class}): ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`}
           </>
         )}
@@ -91,7 +108,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
           onClick={removeStation}
           aria-label="remove"
         >
-          <DeleteIcon />
+          <Delete />
         </IconButton>
       </Typography>
     </Box>

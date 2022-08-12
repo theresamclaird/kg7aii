@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Round from "../Round";
 import QueueIcon from "@mui/icons-material/Queue";
+import { DirectionsCar, Autorenew } from '@mui/icons-material';
 import { v4 } from "uuid";
 import { QRZSessionContext } from "../QRZSession";
 import validateCallsign from "../../utils/validateCallsign";
@@ -20,6 +21,7 @@ const initialStation = {
   inAndOut: false,
   mobile: false,
   qrz: null,
+  reported: false,
 };
 
 const STATION = {
@@ -139,6 +141,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                   onChange={e => setCallsign(e.target.value)}
               />
               <FormControlLabel
+                  label={<Autorenew sx={{ verticalAlign: 'middle' }} />}
                   control={
                   <Checkbox
                       checked={station.inAndOut}
@@ -153,9 +156,9 @@ const RoundForm = ({ number, addRoundToNet }) => {
                       color="primary"
                   />
                   }
-                  label="↩️ (I/O)"
               />
               <FormControlLabel
+                  label={<DirectionsCar sx={{ verticalAlign: 'middle' }} />}
                   control={
                   <Checkbox
                       checked={station.mobile}
@@ -170,8 +173,13 @@ const RoundForm = ({ number, addRoundToNet }) => {
                       color="primary"
                   />
                   }
-                  label="🚗 (Mobile)"
               />
+              <Button
+                onClick={() => addStationToRound()  }
+                variant="contained"
+                color="primary"
+                size="small"
+              >{`Add Station to Round ${number}`}</Button>
             </FormGroup>
             <Box sx={{ mt: 1 }}>{station?.qrz && <QrzStationInformation {...station?.qrz} />}</Box>
         </Grid>
@@ -198,7 +206,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
         <Grid item xs={12}>
             <Round
                 number={number}
-                stations={stations}
+                stations={stations.sort((a, b) => Number(b.mobile) - Number(a.mobile))}
                 removeStation={index => stationsDispatch({ type: STATIONS.REMOVE, payload: { index }})}
                 updateStation={(stationData, index) => stationsDispatch({ type: STATIONS.UPDATE, payload: { stationData, index }})}
             />

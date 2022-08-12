@@ -1,12 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import QRZAccountDialog from '../QRZAccountDialog';
+import { Preamble, Closing } from '../ScriptsDialog';
 
 const getCurrentTime = () => {
   const daysInYear = year => ((year % 4 === 0 && year % 100 > 0) || year % 400 === 0) ? 366 : 365;
@@ -23,11 +28,21 @@ const getCurrentTime = () => {
 const StatusBar = () => {
   const timeRef = useRef();
   const [openQrzAccountDialog, setOpenQrzAccountDialog] = useState(false);
+  const [openPreambleDialog, setOpenPreambleDialog] = useState(false);
+  const [openClosingDialog, setOpenClosingDialog] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => timeRef.current.innerText = getCurrentTime(), 1000);
     return () => clearInterval(intervalId);
   });
+
+  const handleMenu = e => setAnchorEl(e.currentTarget);
+  const handleClose = () => {
+    setOpenPreambleDialog(false);
+    setOpenClosingDialog(false);
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar position="static">
@@ -37,10 +52,32 @@ const StatusBar = () => {
           edge="start"
           color="inherit"
           aria-label="menu"
+          aria-haspopup="true"
+          onClick={handleMenu}
           sx={{ mr: 2 }}
         >
           <MenuIcon />
         </IconButton>
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={() => setOpenPreambleDialog(true)}>Preamble Script</MenuItem>
+          <MenuItem onClick={() => setOpenClosingDialog(true)}>Closing Script</MenuItem>
+          <Preamble open={openPreambleDialog} handleClose={handleClose} />
+          <Closing open={openClosingDialog} handleClose={handleClose} />
+        </Menu>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} ref={timeRef}>{getCurrentTime()}</Typography>
         <Box>
           <IconButton

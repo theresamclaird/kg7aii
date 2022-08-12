@@ -24,7 +24,6 @@ const QrzAccountDialog = ({ open, handleClose }) => {
       <DialogContent>
         {loading && <LinearProgress />}
         {error && <DialogContentText>{error.message}</DialogContentText>}
-        <DialogContentText>Log into QRZ to automatically populate name & location.</DialogContentText>
         <FormGroup>
           <TextField
             autoFocus
