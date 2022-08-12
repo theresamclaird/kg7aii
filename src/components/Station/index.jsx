@@ -53,7 +53,12 @@ const Station = ({ station, removeStation, updateStation, style }) => {
         />
       </Box>
       <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
-        {`${station?.qrz?.name_fmt}: ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`}
+        {station?.qrz && (
+          <>
+          <a href={`https://www.qrz.com/db/${station?.qrz?.call}`} target="_blank">QRZ</a>
+          {`${station?.qrz?.name_fmt} (${station?.qrz?.class}): ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`}
+          </>
+        )}
       </Typography>
       <Box
         onClick={() => station?.qrz?.image && setOpenProfileImageModal(true)}

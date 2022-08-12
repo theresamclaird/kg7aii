@@ -86,6 +86,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
 
     stationDispatch({ type: STATION.CALLSIGN, payload: callsign });
     lookupCallsign(callsign).then(qrzData => {
+      console.log('lookupCallsign', qrzData);
       return stationDispatch({
         type: STATION.QRZ,
         payload: qrzData,
