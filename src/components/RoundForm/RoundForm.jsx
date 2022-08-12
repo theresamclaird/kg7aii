@@ -152,7 +152,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                       color="primary"
                   />
                   }
-                  label="↩️"
+                  label="↩️ (I/O)"
               />
               <FormControlLabel
                   control={
@@ -169,7 +169,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                       color="primary"
                   />
                   }
-                  label="🚗"
+                  label="🚗 (Mobile)"
               />
             </FormGroup>
             <Box sx={{ mt: 1 }}>{station?.qrz && <QrzStationInformation {...station?.qrz} />}</Box>
