@@ -1,10 +1,10 @@
 import React from "react";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
 
 const ImageModal = ({ open, handleClose, children }) => (
-<Dialog style={{ padding: 0, margin: 0 }} open={open} onClose={handleClose}>
-    <DialogContent style={{ padding: 0, margin: 0 }}>
+<Dialog open={open} onClose={handleClose}>
+    <DialogContent>
         {children}
     </DialogContent>
 </Dialog>

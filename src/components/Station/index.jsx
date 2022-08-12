@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ImageModal from '../ImageModal';
+import genericProfilePicture from '../../images/genericProfile.png';
 
 const Station = ({ station, removeStation, updateStation, style }) => {
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
@@ -52,37 +53,33 @@ const Station = ({ station, removeStation, updateStation, style }) => {
         />
       </Box>
       <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
-        <Box>{station?.qrz?.name_fmt}</Box>
-        <Box>{`${station.qrz?.addr2}, ${station.qrz?.state}`}</Box>
-        <Box>{`(${station?.qrz?.timezone})`}</Box>
+        {`${station?.qrz?.name_fmt}: ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`}
       </Typography>
+      <Box
+        onClick={() => station?.qrz?.image && setOpenProfileImageModal(true)}
+        component="img"
+        style={{
+          cursor: station?.qrz?.image ? 'pointer' : 'default',
+          maxHeight: "2rem",
+          objectFit: "contain",
+          float: 'right',
+        }}
+        src={station?.qrz?.image || genericProfilePicture}
+      />
       {station?.qrz?.image && (
-        <>
-          <Box
-            onClick={() => setOpenProfileImageModal(true)}
-            component="img"
-            style={{
-              cursor: 'pointer',
-              maxHeight: "2rem",
-              objectFit: "contain",
-              float: 'right',
-            }}
-            src={station?.qrz?.image}
-          />
-          <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
-            <Box
-              component="img"
-              style={{
-                maxWidth: "100%",
-                maxHeight: "100vh",
-                width: "auto",
-                height: "auto",
-                objectFit: "contain",
-              }}
-              src={station?.qrz?.image}
-            />
-          </ImageModal>
-        </>
+        <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+        <Box
+          component="img"
+          style={{
+            maxWidth: "100%",
+            maxHeight: "100vh",
+            width: "auto",
+            height: "auto",
+            objectFit: "contain",
+          }}
+          src={station?.qrz?.image}
+        />
+      </ImageModal>
       )}
       <Typography>
         <IconButton
