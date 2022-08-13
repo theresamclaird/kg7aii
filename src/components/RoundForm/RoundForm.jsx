@@ -1,23 +1,30 @@
 import React, { useRef, useContext, useReducer, useState } from "react";
-import { Box, Grid } from "@mui/material";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Round from "../Round";
-import QueueIcon from "@mui/icons-material/Queue";
-import { DirectionsCar, Autorenew } from '@mui/icons-material';
+import {
+  Box,
+  Grid,
+  Button,
+  TextField,
+  FormGroup,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material";
+import {
+  Queue,
+  DirectionsCar,
+  Autorenew,
+} from '@mui/icons-material';
 import { v4 } from "uuid";
+import Round from "../Round";
 import { QRZSessionContext } from "../QRZSession";
 import validateCallsign from "../../utils/validateCallsign";
 import ImageModal from "../ImageModal";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import useDebounce from '../../hooks/useDebounce';
 import QrzStationInformation from "./QrzStationInformation";
 import genericProfilePicture from '../../images/genericProfile.png';
 
 const initialStation = {
   callsign: "",
+  attributes: [],
   inAndOut: false,
   mobile: false,
   qrz: null,
@@ -25,23 +32,14 @@ const initialStation = {
 };
 
 const STATION = {
-  QRZ: "QRZ",
-  CALLSIGN: "CALLSIGN",
-  INANDOUT: "INANDOUT",
-  MOBILE: "MOBILE",
+  UPDATE: "UPDATE",
   RESET: "RESET",
 };
 
 const stationReducer = (station, action) => {
   switch (action.type) {
-    case STATION.QRZ:
-      return { ...station, qrz: action.payload };
-    case STATION.CALLSIGN:
-      return { ...station, callsign: action.payload };
-    case STATION.INANDOUT:
-      return { ...station, inAndOut: action.payload };
-    case STATION.MOBILE:
-      return { ...station, mobile: action.payload };
+    case STATION.UPDATE:
+      return { ...station, ...action.payload }
     case STATION.RESET:
       return initialStation;
     default:
@@ -86,12 +84,12 @@ const RoundForm = ({ number, addRoundToNet }) => {
       return;
     }
 
-    stationDispatch({ type: STATION.CALLSIGN, payload: callsign });
+    stationDispatch({ type: STATION.UPDATE, payload: { callsign } });
     lookupCallsign(callsign).then(qrzData => {
       console.log('lookupCallsign', qrzData);
       return stationDispatch({
-        type: STATION.QRZ,
-        payload: qrzData,
+        type: STATION.UPDATE,
+        payload: { qrz: qrzData },
       });
     });
   }, 250, [callsign]);
@@ -117,6 +115,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
     }
   };
 
+  console.log('station', station);
   return (
     <Grid container rowSpacing={1}>
         <Grid item xs={9}>
@@ -140,45 +139,35 @@ const RoundForm = ({ number, addRoundToNet }) => {
                   onKeyPress={handleKeyPress}
                   onChange={e => setCallsign(e.target.value)}
               />
-              <FormControlLabel
-                  label={<Autorenew sx={{ verticalAlign: 'middle' }} />}
-                  control={
-                  <Checkbox
-                      checked={station.inAndOut}
-                      onChange={(e) => {
-                      stationDispatch({
-                          type: STATION.INANDOUT,
-                          payload: e.target.checked
-                      });
-                      }}
-                      onKeyPress={handleKeyPress}
-                      name="inAndOut"
-                      color="primary"
-                  />
-                  }
-              />
-              <FormControlLabel
-                  label={<DirectionsCar sx={{ verticalAlign: 'middle' }} />}
-                  control={
-                  <Checkbox
-                      checked={station.mobile}
-                      onChange={(e) => {
-                      stationDispatch({
-                          type: STATION.MOBILE,
-                          payload: e.target.checked
-                      });
-                      }}
-                      onKeyPress={handleKeyPress}
-                      name="mobile"
-                      color="primary"
-                  />
-                  }
-              />
+              <ToggleButtonGroup
+                size="small"
+                value={station.attributes}
+                aria-label="in-and-out and mobile attributes"
+                onChange={(e, attributes) => {
+                  stationDispatch({
+                    type: STATION.UPDATE,
+                    payload: { attributes },
+                  })
+                }}
+                onKeyPress={handleKeyPress}
+              >
+                <ToggleButton
+                  value="inAndOut"
+                  aria-label="in-and-out"
+                >
+                  <Autorenew />
+                </ToggleButton>
+                <ToggleButton
+                  value="mobile"
+                  aria-label="mobile"
+                >
+                  <DirectionsCar />
+                </ToggleButton>
+              </ToggleButtonGroup>
               <Button
-                onClick={() => addStationToRound()  }
+                onClick={() => addStationToRound()}
                 variant="contained"
                 color="primary"
-                size="small"
               >{`Add Station to Round ${number}`}</Button>
             </FormGroup>
             <Box sx={{ mt: 1 }}>{station?.qrz && <QrzStationInformation {...station?.qrz} />}</Box>
@@ -206,7 +195,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
         <Grid item xs={12}>
             <Round
                 number={number}
-                stations={stations.sort((a, b) => Number(b.mobile) - Number(a.mobile))}
+                stations={stations.sort((a, b) => Number(b.attributes.includes('mobile') - Number(a.attributes.includes('mobile'))))}
                 removeStation={index => stationsDispatch({ type: STATIONS.REMOVE, payload: { index }})}
                 updateStation={(stationData, index) => stationsDispatch({ type: STATIONS.UPDATE, payload: { stationData, index }})}
             />
@@ -214,7 +203,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
         <Grid item xs={12}>
           {stations.length > 0 && (
               <Button
-                startIcon={<QueueIcon />}
+                startIcon={<Queue />}
                 variant="contained"
                 color="primary"
                 onClick={() => {

@@ -5,6 +5,7 @@ import {
   Toolbar,
   Typography,
   IconButton,
+  Button,
   Menu,
   MenuItem
 } from '@mui/material';
@@ -27,15 +28,20 @@ const getCurrentTime = () => {
 
 const StatusBar = () => {
   const timeRef = useRef();
+  const stopwatchRef = useRef();
+  const [stopwatchStartTime, setStopwatchStartTime] = useState(Date.now())
   const [openQrzAccountDialog, setOpenQrzAccountDialog] = useState(false);
   const [openPreambleDialog, setOpenPreambleDialog] = useState(false);
   const [openClosingDialog, setOpenClosingDialog] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
-    const intervalId = setInterval(() => timeRef.current.innerText = getCurrentTime(), 1000);
+    const intervalId = setInterval(() => {
+      timeRef.current.innerText = getCurrentTime();
+      stopwatchRef.current.innerText = new Date(Date.now() - stopwatchStartTime).toISOString().slice(11, 19);
+    }, 1000);
     return () => clearInterval(intervalId);
-  });
+  }, [stopwatchStartTime]);
 
   const handleMenu = e => setAnchorEl(e.currentTarget);
   const handleClose = () => {
@@ -79,6 +85,22 @@ const StatusBar = () => {
           <Closing open={openClosingDialog} handleClose={handleClose} />
         </Menu>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} ref={timeRef}>{getCurrentTime()}</Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: '1rem'
+          }}>
+          <Typography variant="h6" component="div" ref={stopwatchRef} />
+          <Button
+            onClick={() => setStopwatchStartTime(Date.now())}
+            variant="contained"
+            color="primary"
+            size="small"
+          >Reset</Button>
+        </Box>
         <Box>
           <IconButton
             size="large"

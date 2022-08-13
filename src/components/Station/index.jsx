@@ -1,23 +1,34 @@
-import React, { useState } from "react";
-import { Box } from "@material-ui/core";
-import { Link, Typography } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import { Check, Delete, DirectionsCar, Autorenew, OpenInNew } from '@mui/icons-material';
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import React, { useState } from 'react';
+import {
+  Check,
+  Delete,
+  DirectionsCar,
+  Autorenew,
+  OpenInNew,
+} from '@mui/icons-material';
+import {
+  Box,
+  Link,
+  Typography,
+  IconButton,
+  ToggleButton,
+  ToggleButtonGroup,
+ } from '@mui/material';
 import ImageModal from '../ImageModal';
 import genericProfilePicture from '../../images/genericProfile.png';
 
 const Station = ({ station, removeStation, updateStation, style }) => {
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
+  const [reported, setReported] = useState(() => station.reported ? ['reported'] : []);
   return (
-    <Box style={{
+    <Box sx={{
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      gap: '1rem', 
-      margin: '0.25rem 0.5rem',
+      gap: '1rem',
+      py: '0.5rem',
+      backgroundColor: station.reported || station.attributes.includes('inAndOut') ? '#eee' : 'transparent',
       ...style
     }}>
       <Box style={{
@@ -28,40 +39,39 @@ const Station = ({ station, removeStation, updateStation, style }) => {
         gap: '1rem',
         minWidth: '12rem',
       }}>
-        <FormControlLabel
-          label={<Check sx={{ verticalAlign: 'middle' }} />}
-          control={
-            <Checkbox
-              checked={station.reported}
-              onChange={e => updateStation({ reported: e.target.checked })}
-              name="reported"
-              color="primary"
-            />
-          }
-        />
+        <ToggleButtonGroup
+          size="small"
+          value={reported}
+          aria-label="station has reported"
+          onChange={(e, values) => {
+            setReported(values);
+            updateStation({ reported: values.includes('reported') });
+          }}
+        >
+          <ToggleButton value="reported"><Check /></ToggleButton>
+        </ToggleButtonGroup>
         <Typography style={{ minWidth: '5rem' }}>{station.callsign.toUpperCase()}</Typography>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={station.inAndOut}
-              onChange={e => updateStation({ inAndOut: e.target.checked })}
-              name="inAndOut"
-              color="primary"
-            />
-          }
-          label={<Autorenew sx={{ fontSize: '1rem', verticalAlign: 'middle' }} />}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={station.mobile}
-              onChange={e => updateStation({ mobile: e.target.checked })}
-              name="mobile"
-              color="primary"
-            />
-          }
-          label={<DirectionsCar sx={{ fontSize: '1rem', verticalAlign: 'middle' }} />}
-        />
+        <ToggleButtonGroup
+          size="small"
+          value={station.attributes}
+          aria-label="in-and-out and mobile attributes"
+          onChange={(e, attributes) => {
+            updateStation({ attributes });
+          }}
+        >
+          <ToggleButton
+            value="inAndOut"
+            aria-label="in-and-out"
+          >
+            <Autorenew />
+          </ToggleButton>
+          <ToggleButton
+            value="mobile"
+            aria-label="mobile"
+          >
+            <DirectionsCar />
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Box>
       <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
         {station?.qrz && (
