@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Typography,
   IconButton,
@@ -43,7 +42,7 @@ const Round = ({
               size="small"
               onClick={() => setShowStations(!showStations)}
             >
-              {showStations ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              {showStations ? <ExpandLess /> : <ExpandMore />}
             </IconButton>
           )}
           <Typography style={{ padding: '0.5rem' }}>{`Round ${number} (${stations.length} ${stations.length === 1 ? "station" : "stations"})`}</Typography>

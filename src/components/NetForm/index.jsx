@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Grid } from '@mui/material';
-import Paper from "@mui/material/Paper";
+import { Grid, Paper } from '@mui/material';
 import RoundForm from "../RoundForm";
 import Round from "../Round";
 

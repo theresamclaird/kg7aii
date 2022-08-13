@@ -1,19 +1,20 @@
 import React, { useContext, useState } from "react";
-import Button from "@mui/material/Button";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import TextField from "@mui/material/TextField";
-import Checkbox from '@mui/material/Checkbox';
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import {
+  Button,
+  FormGroup,
+  FormControlLabel,
+  TextField,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import { QRZSessionContext } from "../QRZSession";
-import LinearProgress from "@mui/material/LinearProgress";
 
 const QrzAccountDialog = ({ open, handleClose }) => {
-  const { loading, error, setCredentials } = useContext(QRZSessionContext);
+  const { error, setCredentials } = useContext(QRZSessionContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [staySignedIn, setStaySignedIn] = useState(true);
@@ -22,7 +23,6 @@ const QrzAccountDialog = ({ open, handleClose }) => {
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle>QRZ Account</DialogTitle>
       <DialogContent>
-        {loading && <LinearProgress />}
         {error && <DialogContentText>{error.message}</DialogContentText>}
         <FormGroup>
           <TextField

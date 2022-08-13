@@ -7,7 +7,7 @@ import {
   IconButton,
   Button,
   Menu,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -42,10 +42,6 @@ const StatusBar = () => {
       const elapsed = new Date(Date.now() - stopwatchStartTime);
       const minutes = elapsed.getUTCMinutes();
       stopwatchRef.current.innerText = `${pad(elapsed.getUTCHours())}:${pad(minutes)}:${pad(elapsed.getUTCSeconds())}`;
-      if (minutes > 1) {
-        stopwatchRef.current.style.color = 'white';
-        stopwatchRef.current.style.backgroundColor = 'red';
-      }
     }, 1000);
     return () => clearInterval(intervalId);
   }, [stopwatchStartTime]);
@@ -99,7 +95,7 @@ const StatusBar = () => {
             alignItems: 'center',
             gap: '1rem'
           }}>
-          <Typography variant="h6" component="div" ref={stopwatchRef} sx={{ px: 1, border: 'solid 1px #000', borderRadius: '1rem' }}>00:00:00</Typography>
+          <Typography variant="h6" ref={stopwatchRef}>00:00:00</Typography>
           <Button
             onClick={() => setStopwatchStartTime(Date.now())}
             variant="contained"

@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import {
   Check,
   Delete,
-  DirectionsCar,
   OpenInNew,
-  Announcement,
   CheckBoxOutlineBlank,
 } from '@mui/icons-material';
 import {
@@ -65,7 +63,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
             target="_blank"
             sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
           >
-            QRZ <OpenInNew sx={{ fontSize: '1rem', ml: 1 }} />
+            QRZ<OpenInNew sx={{ fontSize: '1rem', ml: 1 }} />
           </Link>
           {`${station?.qrz?.name_fmt} (${station?.qrz?.class}): ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`}
           </>

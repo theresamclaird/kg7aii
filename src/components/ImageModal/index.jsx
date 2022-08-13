@@ -1,6 +1,5 @@
 import React from "react";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
+import { Dialog, DialogContent } from '@mui/material';
 
 const ImageModal = ({ open, handleClose, children }) => (
 <Dialog open={open} onClose={handleClose}>
