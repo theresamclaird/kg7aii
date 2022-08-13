@@ -79,8 +79,8 @@ const StatusBar = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={() => setOpenPreambleDialog(true)}>Preamble Script</MenuItem>
-          <MenuItem onClick={() => setOpenClosingDialog(true)}>Closing Script</MenuItem>
+          <MenuItem onClick={() => setOpenPreambleDialog(true)}>Preamble</MenuItem>
+          <MenuItem onClick={() => setOpenClosingDialog(true)}>Closing</MenuItem>
           <Preamble open={openPreambleDialog} handleClose={handleClose} />
           <Closing open={openClosingDialog} handleClose={handleClose} />
         </Menu>

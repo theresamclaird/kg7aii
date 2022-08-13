@@ -22,7 +22,7 @@ const QrzStationInformation = ({
                 <Typography variant="body2">
                     {`${name_fmt} (${qrz?.class})`}<br />
                     {`Expires: ${expdate}`}<br />
-                    {<Link href={`mailto:${email}`}>{email} <OpenInNew sx={{ fontSize: '1rem', verticalAlign: 'middle'}} /></Link>}<br />
+                    {email && <><Link href={`mailto:${email}`}>{email}</Link><br /></>}
                     {call && <Link href={`https://www.qrz.com/db/${call}`} target="_blank">QRZ <OpenInNew sx={{ fontSize: '1rem', verticalAlign: 'middle'}} /></Link>}
                 </Typography>
             </Grid>

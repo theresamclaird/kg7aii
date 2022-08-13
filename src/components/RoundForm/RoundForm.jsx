@@ -2,6 +2,7 @@ import React, { useRef, useContext, useReducer, useState } from "react";
 import {
   Box,
   Grid,
+  IconButton,
   Button,
   TextField,
   FormGroup,
@@ -9,7 +10,7 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import {
-  Queue,
+  AddBox,
   DirectionsCar,
   Autorenew,
 } from '@mui/icons-material';
@@ -86,7 +87,6 @@ const RoundForm = ({ number, addRoundToNet }) => {
 
     stationDispatch({ type: STATION.UPDATE, payload: { callsign } });
     lookupCallsign(callsign).then(qrzData => {
-      console.log('lookupCallsign', qrzData);
       return stationDispatch({
         type: STATION.UPDATE,
         payload: { qrz: qrzData },
@@ -115,7 +115,6 @@ const RoundForm = ({ number, addRoundToNet }) => {
     }
   };
 
-  console.log('station', station);
   return (
     <Grid container rowSpacing={1}>
         <Grid item xs={9}>
@@ -168,7 +167,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                 onClick={() => addStationToRound()}
                 variant="contained"
                 color="primary"
-              >{`Add Station to Round ${number}`}</Button>
+              ><AddBox sx={{ mr: 1 }} />{`Round ${number}`}</Button>
             </FormGroup>
             <Box sx={{ mt: 1 }}>{station?.qrz && <QrzStationInformation {...station?.qrz} />}</Box>
         </Grid>
@@ -198,24 +197,18 @@ const RoundForm = ({ number, addRoundToNet }) => {
                 stations={stations.sort((a, b) => Number(b.attributes.includes('mobile') - Number(a.attributes.includes('mobile'))))}
                 removeStation={index => stationsDispatch({ type: STATIONS.REMOVE, payload: { index }})}
                 updateStation={(stationData, index) => stationsDispatch({ type: STATIONS.UPDATE, payload: { stationData, index }})}
+                addRound={stations.length > 0 && (
+                    <IconButton
+                      sx={{ color: 'white' }}
+                      size="small"
+                      onClick={() => {
+                          addRoundToNet(stations);
+                          stationsDispatch({ type: STATIONS.RESET });
+                          resetStationForm();
+                      }}
+                    ><AddBox /></IconButton>
+                )}
             />
-        </Grid>
-        <Grid item xs={12}>
-          {stations.length > 0 && (
-              <Button
-                startIcon={<Queue />}
-                variant="contained"
-                color="primary"
-                onClick={() => {
-                    addRoundToNet(stations);
-                    stationsDispatch({ type: STATIONS.RESET });
-                    resetStationForm();
-                }}
-                size="small"
-              >
-                Round
-              </Button>
-          )}
         </Grid>
     </Grid>
   );

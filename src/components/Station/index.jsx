@@ -26,12 +26,12 @@ const Station = ({ station, removeStation, updateStation, style }) => {
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      gap: '1rem',
-      py: '0.5rem',
+      gap: 1,
+      p: 1,
       backgroundColor: station.reported || station.attributes.includes('inAndOut') ? '#eee' : 'transparent',
       ...style
     }}>
-      <Box style={{
+      <Box sx={{
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-start',
