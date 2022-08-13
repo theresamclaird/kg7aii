@@ -37,6 +37,7 @@ const NetForm = () => {
               <Grid item xs={12} key={`round-${roundIndex}`}>
                 <Round
                   allowHideStations={true}
+                  hideStations={true}
                   key={roundIndex}
                   number={roundIndex + 1}
                   stations={stations}

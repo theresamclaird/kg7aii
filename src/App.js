@@ -6,6 +6,17 @@ import NetForm from './components/NetForm';
 import StatusBar from './components/StatusBar';
 import "./styles.css";
 
+/* Todo:
+ * 
+ * - add timestamp to stations in a round; update sort order by mobile, chronological
+ * - add configuration for:
+ *      - preamble
+ *      - closing
+ *      - order of stations in a round
+ *      - colors/theme?
+ * 
+*/
+
 export default function App() {
   return (
     <PersistentItemsProvider localStorageKey="nets">

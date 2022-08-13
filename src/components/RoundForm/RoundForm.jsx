@@ -6,7 +6,7 @@ import {
   TextField,
   FormGroup,
 } from "@mui/material";
-import { AddBox } from '@mui/icons-material';
+import { AddBox, KeyboardDoubleArrowDown } from '@mui/icons-material';
 import { v4 } from "uuid";
 import Round from "../Round";
 import { QRZSessionContext } from "../QRZSession";
@@ -54,7 +54,7 @@ const stationsReducer = (stations, action) => {
     case STATIONS.REMOVE:
       return stations.filter((station, index) => index !== action.payload.index);
     case STATIONS.ADD:
-      return [...stations, { guid: v4(), ...action.payload }];
+      return [...stations, { guid: v4(), ...action.payload }].sort((a, b) => Number(b.attributes.includes('mobile') - Number(a.attributes.includes('mobile'))));
     case STATIONS.RESET:
       return [];
     case STATIONS.UPDATE:
@@ -129,6 +129,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                   inputRef={callsignRef}
                   variant="outlined"
                   size="small"
+                  sx={{ width: '7rem' }}
                   onKeyPress={handleKeyPress}
                   onChange={e => setCallsign(e.target.value)}
               />
@@ -137,7 +138,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                 onChange={(e, attributes) => {
                   stationDispatch({
                     type: STATION.UPDATE,
-                    payload: { attributes },
+                    payload: { attributes, reported: attributes.includes('inAndOut') },
                   })
                 }}
                 onKeyPress={handleKeyPress}
@@ -173,7 +174,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
         <Grid item xs={12}>
             <Round
                 number={number}
-                stations={stations.sort((a, b) => Number(b.attributes.includes('mobile') - Number(a.attributes.includes('mobile'))))}
+                stations={stations}
                 removeStation={index => stationsDispatch({ type: STATIONS.REMOVE, payload: { index }})}
                 updateStation={(stationData, index) => stationsDispatch({ type: STATIONS.UPDATE, payload: { stationData, index }})}
                 addRound={stations.length > 0 && (
@@ -185,7 +186,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                           stationsDispatch({ type: STATIONS.RESET });
                           resetStationForm();
                       }}
-                    ><AddBox /></IconButton>
+                    ><KeyboardDoubleArrowDown /></IconButton>
                 )}
             />
         </Grid>

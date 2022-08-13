@@ -35,7 +35,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
       alignItems: 'center',
       gap: 2,
       p: 1,
-      backgroundColor: station.reported || station.attributes.includes('inAndOut') ? '#eee' : 'transparent',
+      backgroundColor: station.reported ? '#eee' : 'transparent',
       ...style
     }}>
       <ToggleButtonGroup
@@ -54,7 +54,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
           autoFocus
           value={callsign}
           size="small"
-          sx={{ width: '6rem' }}
+          sx={{ width: '7rem' }}
           onFocus={e => e.target.select()}
           onChange={e => setCallsign(e.target.value)}
           onKeyPress={e => {
@@ -77,7 +77,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
       {!editCallsign && (
         <Typography
           onClick={() => setEditCallsign(true)}
-          sx={{ minWidth: '6rem' }}
+          sx={{ minWidth: '7rem' }}
         >{station.callsign.toUpperCase()}</Typography>
       )}        
       <Attributes

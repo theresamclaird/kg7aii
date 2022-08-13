@@ -2,9 +2,9 @@ import React from 'react';
 import { ToggleButtonGroup, ToggleButton } from '@mui/material';
 import {
     DirectionsCar,
-    Announcement,
-    Autorenew,
-    Cloud,
+    Comment,
+    Language,
+    PublishedWithChanges,
 } from '@mui/icons-material';
   
 const Attributes = ({ values, onChange, onKeyPress }) => {
@@ -32,19 +32,19 @@ const Attributes = ({ values, onChange, onKeyPress }) => {
             value="internet"
             aria-label="internet"
         >
-            <Cloud />
+            <Language />
         </ToggleButton>
         <ToggleButton
             value="recheck"
             aria-label="recheck"
         >
-            <Autorenew />
+            <PublishedWithChanges />
         </ToggleButton>
         <ToggleButton
             value="comment"
             aria-label="comment"
         >
-            <Announcement />
+            <Comment />
         </ToggleButton>
       </ToggleButtonGroup>
     );

@@ -13,11 +13,12 @@ const Round = ({
   number,
   stations,
   allowHideStations = false,
+  hideStations = false,
   removeStation,
   updateStation,
   addRound,
 }) => {
-  const [showStations, setShowStations] = useState(true);
+  const [showStations, setShowStations] = useState(!hideStations);
 
   return (
     <Grid container>
@@ -26,28 +27,19 @@ const Round = ({
         color: 'white',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
       }}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            gap: 1,
-          }}>
-          {allowHideStations && (
-            <IconButton
-              sx={{ color: 'white' }}
-              size="small"
-              onClick={() => setShowStations(!showStations)}
-            >
-              {showStations ? <ExpandLess /> : <ExpandMore />}
-            </IconButton>
-          )}
-          <Typography style={{ padding: '0.5rem' }}>{`Round ${number} (${stations.length} ${stations.length === 1 ? "station" : "stations"})`}</Typography>
-        </Box>
-        {addRound}
+      {addRound}
+        {allowHideStations && (
+          <IconButton
+            sx={{ color: 'white' }}
+            size="small"
+            onClick={() => setShowStations(!showStations)}
+          >
+            {showStations ? <ExpandLess /> : <ExpandMore />}
+          </IconButton>
+        )}
+        <Typography style={{ padding: '0.5rem' }}>{`Round ${number} (${stations.length} ${stations.length === 1 ? "station" : "stations"})`}</Typography>
       </Grid>
       <Grid item xs={12}>
         {showStations && stations.map((station, index) => (
