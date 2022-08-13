@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Check,
   Delete,
@@ -12,52 +12,80 @@ import {
   IconButton,
   ToggleButton,
   ToggleButtonGroup,
+  TextField,
  } from '@mui/material';
-import ImageModal from '../ImageModal';
+ import { QRZSessionContext } from "../QRZSession";
+ import ImageModal from '../ImageModal';
 import Attributes from '../Attributes';
+import validateCallsign from "../../utils/validateCallsign";
 import genericProfilePicture from '../../images/genericProfile.png';
 
 const Station = ({ station, removeStation, updateStation, style }) => {
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
   const [reported, setReported] = useState(() => station.reported ? ['reported'] : []);
+  const [editCallsign, setEditCallsign] = useState(false);
+  const [callsign, setCallsign] = useState(station.callsign);
+  const { lookupCallsign } = useContext(QRZSessionContext);
+
   return (
     <Box sx={{
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      gap: 1,
+      gap: 2,
       p: 1,
       backgroundColor: station.reported || station.attributes.includes('inAndOut') ? '#eee' : 'transparent',
       ...style
     }}>
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        gap: 1,
-      }}>
-        <ToggleButtonGroup
+      <ToggleButtonGroup
+        size="small"
+        value={reported}
+        aria-label="station has reported"
+        onChange={(e, values) => {
+          setReported(values);
+          updateStation({ reported: values.includes('reported') });
+        }}
+      >
+        <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
+      </ToggleButtonGroup>
+      {editCallsign && (
+        <TextField
+          autoFocus
+          value={callsign}
           size="small"
-          value={reported}
-          aria-label="station has reported"
-          onChange={(e, values) => {
-            setReported(values);
-            updateStation({ reported: values.includes('reported') });
+          sx={{ width: '6rem' }}
+          onFocus={e => e.target.select()}
+          onChange={e => setCallsign(e.target.value)}
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              if (callsign === station.callsign) {
+                setEditCallsign(false);
+                return;
+              }
+              if (validateCallsign(callsign)) {
+                lookupCallsign(callsign).then(qrzData => {
+                  updateStation({ callsign: e.target.value, qrz: qrzData });
+                });
+                return;
+              }
+              updateStation({ callsign: e.target.value, qrz: null });
+            }
           }}
-        >
-          <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
-        </ToggleButtonGroup>
-        <Typography style={{ minWidth: '5rem' }}>{station.callsign.toUpperCase()}</Typography>
-        <Attributes
-          values={station.attributes}
-          onChange={(e, attributes) => { updateStation({ attributes })}}
         />
-      </Box>
-      <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
+      )}
+      {!editCallsign && (
+        <Typography
+          onClick={() => setEditCallsign(true)}
+          sx={{ minWidth: '6rem' }}
+        >{station.callsign.toUpperCase()}</Typography>
+      )}        
+      <Attributes
+        values={station.attributes}
+        onChange={(e, attributes) => { updateStation({ attributes })}}
+      />
+      <Typography>
         {station?.qrz && (
-          <>
           <Link
             href={`https://www.qrz.com/db/${station?.qrz?.call}`}
             target="_blank"
@@ -65,14 +93,15 @@ const Station = ({ station, removeStation, updateStation, style }) => {
           >
             QRZ<OpenInNew sx={{ fontSize: '1rem', ml: 1 }} />
           </Link>
-          {`${station?.qrz?.name_fmt} (${station?.qrz?.class}): ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`}
-          </>
         )}
+      </Typography>
+      <Typography sx={{ flexGrow: 1 }}>
+        {station?.qrz && (`${station?.qrz?.name_fmt} (${station?.qrz?.class}): ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`)}
       </Typography>
       <Box
         onClick={() => station?.qrz?.image && setOpenProfileImageModal(true)}
         component="img"
-        style={{
+        sx={{
           cursor: station?.qrz?.image ? 'pointer' : 'default',
           maxHeight: "2rem",
           objectFit: "contain",
@@ -96,10 +125,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
       </ImageModal>
       )}
       <Typography>
-        <IconButton
-          onClick={removeStation}
-          aria-label="remove"
-        >
+        <IconButton onClick={removeStation} aria-label="remove">
           <Delete />
         </IconButton>
       </Typography>

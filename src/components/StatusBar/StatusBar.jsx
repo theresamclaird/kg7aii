@@ -14,17 +14,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import QRZAccountDialog from '../QRZAccountDialog';
 import { Preamble, Closing } from '../ScriptsDialog';
 
-const getCurrentTime = () => {
-  const daysInYear = year => ((year % 4 === 0 && year % 100 > 0) || year % 400 === 0) ? 366 : 365;
-  const now = new Date();
-  const currentYear = new Date().getFullYear();
-  const start = new Date(currentYear, 0, 0);
-  const diff = now - start;
-  const oneDay = 1000 * 60 * 60 * 24;
-  const day = Math.floor(diff / oneDay);
-  const daysInCurrentYear = daysInYear(currentYear);
-  return `${now.toLocaleString()} (${day} / ${daysInCurrentYear} = ${Math.floor(100 * day / daysInCurrentYear)}%)`;
-};
+const currentTime = () => new Date().toLocaleString(Navigator?.languages?.[0] || 'en-US', { hour12: false });
 
 const StatusBar = () => {
   const timeRef = useRef();
@@ -36,9 +26,10 @@ const StatusBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
+    stopwatchRef.current.innerText = '00:00:00';
     const pad = i => ('0' + i).slice(-2);
     const intervalId = setInterval(() => {
-      timeRef.current.innerText = getCurrentTime();
+      timeRef.current.innerText = currentTime();
       const elapsed = new Date(Date.now() - stopwatchStartTime);
       const minutes = elapsed.getUTCMinutes();
       stopwatchRef.current.innerText = `${pad(elapsed.getUTCHours())}:${pad(minutes)}:${pad(elapsed.getUTCSeconds())}`;
@@ -86,7 +77,7 @@ const StatusBar = () => {
           <Preamble open={openPreambleDialog} handleClose={handleClose} />
           <Closing open={openClosingDialog} handleClose={handleClose} />
         </Menu>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} ref={timeRef}>{getCurrentTime()}</Typography>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} ref={timeRef}>{currentTime()}</Typography>
         <Box
           sx={{
             display: 'flex',
@@ -95,7 +86,7 @@ const StatusBar = () => {
             alignItems: 'center',
             gap: '1rem'
           }}>
-          <Typography variant="h6" ref={stopwatchRef}>00:00:00</Typography>
+          <Typography variant="h6" ref={stopwatchRef} />
           <Button
             onClick={() => setStopwatchStartTime(Date.now())}
             variant="contained"

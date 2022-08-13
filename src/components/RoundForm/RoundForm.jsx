@@ -100,7 +100,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       if (!validateCallsign(callsign)) {
         return;
       }
@@ -156,7 +156,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
                 as="img"
                 sx={{
                     cursor: station?.qrz?.image ? 'pointer' : 'default',
-                    maxHeight: '13rem',
+                    height: '13rem',
                     objectFit: "contain",
                     m: 0,
                     p: 0,
