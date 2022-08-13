@@ -3,8 +3,9 @@ import {
   Check,
   Delete,
   DirectionsCar,
-  Autorenew,
   OpenInNew,
+  Announcement,
+  CheckBoxOutlineBlank,
 } from '@mui/icons-material';
 import {
   Box,
@@ -15,6 +16,7 @@ import {
   ToggleButtonGroup,
  } from '@mui/material';
 import ImageModal from '../ImageModal';
+import Attributes from '../Attributes';
 import genericProfilePicture from '../../images/genericProfile.png';
 
 const Station = ({ station, removeStation, updateStation, style }) => {
@@ -36,8 +38,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        gap: '1rem',
-        minWidth: '12rem',
+        gap: 1,
       }}>
         <ToggleButtonGroup
           size="small"
@@ -48,30 +49,13 @@ const Station = ({ station, removeStation, updateStation, style }) => {
             updateStation({ reported: values.includes('reported') });
           }}
         >
-          <ToggleButton value="reported"><Check /></ToggleButton>
+          <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
         </ToggleButtonGroup>
         <Typography style={{ minWidth: '5rem' }}>{station.callsign.toUpperCase()}</Typography>
-        <ToggleButtonGroup
-          size="small"
-          value={station.attributes}
-          aria-label="in-and-out and mobile attributes"
-          onChange={(e, attributes) => {
-            updateStation({ attributes });
-          }}
-        >
-          <ToggleButton
-            value="inAndOut"
-            aria-label="in-and-out"
-          >
-            <Autorenew />
-          </ToggleButton>
-          <ToggleButton
-            value="mobile"
-            aria-label="mobile"
-          >
-            <DirectionsCar />
-          </ToggleButton>
-        </ToggleButtonGroup>
+        <Attributes
+          values={station.attributes}
+          onChange={(e, attributes) => { updateStation({ attributes })}}
+        />
       </Box>
       <Typography sx={{ flex: 1, display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: '2rem' }}>
         {station?.qrz && (

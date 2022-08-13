@@ -36,9 +36,16 @@ const StatusBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
+    const pad = i => ('0' + i).slice(-2);
     const intervalId = setInterval(() => {
       timeRef.current.innerText = getCurrentTime();
-      stopwatchRef.current.innerText = new Date(Date.now() - stopwatchStartTime).toISOString().slice(11, 19);
+      const elapsed = new Date(Date.now() - stopwatchStartTime);
+      const minutes = elapsed.getUTCMinutes();
+      stopwatchRef.current.innerText = `${pad(elapsed.getUTCHours())}:${pad(minutes)}:${pad(elapsed.getUTCSeconds())}`;
+      if (minutes > 1) {
+        stopwatchRef.current.style.color = 'white';
+        stopwatchRef.current.style.backgroundColor = 'red';
+      }
     }, 1000);
     return () => clearInterval(intervalId);
   }, [stopwatchStartTime]);
@@ -51,8 +58,8 @@ const StatusBar = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
+    <AppBar position="sticky">
+      <Toolbar variant="dense">
         <IconButton
           size="large"
           edge="start"
@@ -60,7 +67,6 @@ const StatusBar = () => {
           aria-label="menu"
           aria-haspopup="true"
           onClick={handleMenu}
-          sx={{ mr: 2 }}
         >
           <MenuIcon />
         </IconButton>
@@ -93,7 +99,7 @@ const StatusBar = () => {
             alignItems: 'center',
             gap: '1rem'
           }}>
-          <Typography variant="h6" component="div" ref={stopwatchRef} />
+          <Typography variant="h6" component="div" ref={stopwatchRef} sx={{ px: 1, border: 'solid 1px #000', borderRadius: '1rem' }}>00:00:00</Typography>
           <Button
             onClick={() => setStopwatchStartTime(Date.now())}
             variant="contained"
@@ -101,19 +107,17 @@ const StatusBar = () => {
             size="small"
           >Reset</Button>
         </Box>
-        <Box>
-          <IconButton
-            size="large"
-            aria-label="qrz account"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={() => setOpenQrzAccountDialog(true)}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <QRZAccountDialog open={openQrzAccountDialog} handleClose={() => setOpenQrzAccountDialog(false)} />
-        </Box>
+        <IconButton
+          size="large"
+          aria-label="qrz account"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={() => setOpenQrzAccountDialog(true)}
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <QRZAccountDialog open={openQrzAccountDialog} handleClose={() => setOpenQrzAccountDialog(false)} />
       </Toolbar>
     </AppBar>
   );

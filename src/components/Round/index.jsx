@@ -29,7 +29,14 @@ const Round = ({
         flexDirection: 'row',
         justifyContent: 'space-between',
       }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', gap: 1 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            gap: 1,
+          }}>
           {allowHideStations && (
             <IconButton
               sx={{ color: 'white' }}
@@ -41,7 +48,7 @@ const Round = ({
           )}
           <Typography style={{ padding: '0.5rem' }}>{`Round ${number} (${stations.length} ${stations.length === 1 ? "station" : "stations"})`}</Typography>
         </Box>
-        <Box>{addRound}</Box>
+        {addRound}
       </Grid>
       <Grid item xs={12}>
         {showStations && stations.map((station, index) => (

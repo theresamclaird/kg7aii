@@ -3,17 +3,10 @@ import {
   Box,
   Grid,
   IconButton,
-  Button,
   TextField,
   FormGroup,
-  ToggleButton,
-  ToggleButtonGroup,
 } from "@mui/material";
-import {
-  AddBox,
-  DirectionsCar,
-  Autorenew,
-} from '@mui/icons-material';
+import { AddBox } from '@mui/icons-material';
 import { v4 } from "uuid";
 import Round from "../Round";
 import { QRZSessionContext } from "../QRZSession";
@@ -21,6 +14,7 @@ import validateCallsign from "../../utils/validateCallsign";
 import ImageModal from "../ImageModal";
 import useDebounce from '../../hooks/useDebounce';
 import QrzStationInformation from "./QrzStationInformation";
+import Attributes from '../Attributes';
 import genericProfilePicture from '../../images/genericProfile.png';
 
 const initialStation = {
@@ -138,10 +132,8 @@ const RoundForm = ({ number, addRoundToNet }) => {
                   onKeyPress={handleKeyPress}
                   onChange={e => setCallsign(e.target.value)}
               />
-              <ToggleButtonGroup
-                size="small"
-                value={station.attributes}
-                aria-label="in-and-out and mobile attributes"
+              <Attributes
+                values={station.attributes}
                 onChange={(e, attributes) => {
                   stationDispatch({
                     type: STATION.UPDATE,
@@ -149,25 +141,12 @@ const RoundForm = ({ number, addRoundToNet }) => {
                   })
                 }}
                 onKeyPress={handleKeyPress}
-              >
-                <ToggleButton
-                  value="inAndOut"
-                  aria-label="in-and-out"
-                >
-                  <Autorenew />
-                </ToggleButton>
-                <ToggleButton
-                  value="mobile"
-                  aria-label="mobile"
-                >
-                  <DirectionsCar />
-                </ToggleButton>
-              </ToggleButtonGroup>
-              <Button
+              />
+              <IconButton
                 onClick={() => addStationToRound()}
                 variant="contained"
                 color="primary"
-              ><AddBox sx={{ mr: 1 }} />{`Round ${number}`}</Button>
+              ><AddBox /></IconButton>
             </FormGroup>
             <Box sx={{ mt: 1 }}>{station?.qrz && <QrzStationInformation {...station?.qrz} />}</Box>
         </Grid>
