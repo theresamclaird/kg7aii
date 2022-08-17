@@ -46,7 +46,6 @@ const QrzStationInformation = ({
 
         return (
         <Grid container spacing={1}>
-            <Grid item xs={12}><Typography variant="subtitle1">QRZ Lookup:</Typography></Grid>
             <Grid item xs={3}>
                 <Box
                     onClick={() => image && setOpenProfileImageModal(true)}
@@ -68,7 +67,7 @@ const QrzStationInformation = ({
                 )}
             </Grid>
             <Grid item xs={4}>
-                <Typography variant="body2">{`${name_fmt} ${qrz?.class ? `(${qrz?.class})` : ''}`}</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: '900' }}>{`${call} (${name_fmt}${qrz?.class ? `, ${qrz?.class}` : ''})`}</Typography>
                 {aliases && <Typography variant="body2">{`Aliases: ${aliases}`}</Typography>}
                 {addr1 && <Typography variant="body2">{addr1}</Typography>}
                 {addr2 && <Typography variant="body2">{`${addr2} ${state ? state : ''} ${zip ? zip : ''}`}</Typography>}

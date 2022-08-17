@@ -84,20 +84,19 @@ const Station = ({ station, removeStation, updateStation, style }) => {
         values={station.attributes}
         onChange={(e, attributes) => { updateStation({ attributes })}}
       />
-      <Typography>
-        {station?.qrzData && (
-          <Link
-            href={`https://www.qrz.com/db/${station?.qrzData?.call}`}
-            target="_blank"
-            sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
-          >
-            QRZ<OpenInNew sx={{ fontSize: '1rem', ml: 1 }} />
-          </Link>
-        )}
-      </Typography>
-      <Typography sx={{ flexGrow: 1 }}>
-        {station?.qrzData && (`${station?.qrzData?.name_fmt} (${station?.qrzData?.class}): ${station.qrzData?.addr2}, ${station.qrzData?.state} (${station?.qrzData?.timezone})`)}
-      </Typography>
+      <Box sx={{ flexGrow: 1 }}>
+        {station?.name && <Typography>{`${station.name}${station?.location && `, ${station.location}`}`}</Typography>}
+        {station?.qrzData && <Typography>
+            {station?.qrzData?.name_fmt}
+            <Link
+              sx={{ ml: 1 }}
+              href={`https://www.qrz.com/db/${station?.qrzData?.call}`}
+              target="_blank"
+            >
+              QRZ<OpenInNew sx={{ fontSize: '1rem', ml: 1 }} />
+            </Link>
+        </Typography>}
+      </Box>
       <Box
         onClick={() => station?.qrzData?.image && setOpenProfileImageModal(true)}
         component="img"

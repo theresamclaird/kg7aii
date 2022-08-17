@@ -8,14 +8,15 @@ import {
 } from '@mui/icons-material';
   
 const Attributes = ({ values, onChange, onKeyPress }) => {
+    console.log('attributes', values);
     return (
         <ToggleButtonGroup
-        size="small"
-        value={values}
-        aria-label="in-and-out and mobile attributes"
-        onChange={(e, attributes) => onChange(e, attributes)}
-        onKeyPress={onKeyPress}
-      >
+            size="small"
+            value={values}
+            aria-label="in-and-out and mobile attributes"
+            onChange={(e, attributes) => onChange(e, attributes)}
+            onKeyPress={onKeyPress}
+        >
         <ToggleButton
             value="inAndOut"
             aria-label="in-and-out"

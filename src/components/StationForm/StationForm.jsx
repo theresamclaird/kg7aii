@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Grid, IconButton, TextField } from "@mui/material";
 import { AddBox } from '@mui/icons-material';
 import { QRZSessionContext } from "../QRZSession";
@@ -6,6 +6,8 @@ import useDebounce from '../../hooks/useDebounce';
 import Attributes from '../Attributes';
 import QrzStationInformation from "./QrzStationInformation";
 import validateCallsign from "../../utils/validateCallsign";
+
+// todo: Attributes are not clearing after adding a station to a round.
 
 const StationForm = ({ addStationToRound }) => {
     const { lookupCallsign } = useContext(QRZSessionContext);
@@ -16,17 +18,14 @@ const StationForm = ({ addStationToRound }) => {
     const [attributes, setAttributes] = useState([]);
     const [qrzData, setQrzData] = useState(null);
 
-    const resetStation = () => {
+    const addStation = () => {
+        addStationToRound({ callSign, name, location, attributes, qrzData });
+
         setCallSign('');
         setName('');
         setLocation('');
         setAttributes([]);
         setQrzData(null);
-    };
-
-    const addStation = station => {
-        addStationToRound({ callSign, name, location, attributes, qrzData });
-        resetStation();
     };
 
     const handleKeyPress = (e) => {
@@ -39,8 +38,6 @@ const StationForm = ({ addStationToRound }) => {
         }
     };
     
-    useEffect(() => console.table(qrzData), [qrzData]);
-
     useDebounce(() => {
         if (!validateCallsign(callSign)) {
           callSignRef.current.focus();
