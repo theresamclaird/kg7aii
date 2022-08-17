@@ -23,8 +23,8 @@ import genericProfilePicture from '../../images/genericProfile.png';
 const Station = ({ station, removeStation, updateStation, style }) => {
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
   const [reported, setReported] = useState(() => station.reported ? ['reported'] : []);
-  const [editCallsign, setEditCallsign] = useState(false);
-  const [callsign, setCallsign] = useState(station.callsign);
+  const [editCallSign, setEditCallSign] = useState(false);
+  const [callSign, setCallSign] = useState(station.callSign);
   const { lookupCallsign } = useContext(QRZSessionContext);
 
   return (
@@ -49,45 +49,45 @@ const Station = ({ station, removeStation, updateStation, style }) => {
       >
         <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
       </ToggleButtonGroup>
-      {editCallsign && (
+      {editCallSign && (
         <TextField
           autoFocus
-          value={callsign}
+          value={callSign}
           size="small"
           sx={{ width: '7rem' }}
           onFocus={e => e.target.select()}
-          onChange={e => setCallsign(e.target.value)}
+          onChange={e => setCallSign(e.target.value)}
           onKeyPress={e => {
             if (e.key === 'Enter') {
-              if (callsign === station.callsign) {
-                setEditCallsign(false);
+              if (callSign === station.callSign) {
+                setEditCallSign(false);
                 return;
               }
-              if (validateCallsign(callsign)) {
-                lookupCallsign(callsign).then(qrzData => {
-                  updateStation({ callsign: e.target.value, qrz: qrzData });
+              if (validateCallsign(callSign)) {
+                lookupCallsign(callSign).then(qrzData => {
+                  updateStation({ callSign: e.target.value, qrzData });
                 });
                 return;
               }
-              updateStation({ callsign: e.target.value, qrz: null });
+              updateStation({ callsign: e.target.value, qrzData: null });
             }
           }}
         />
       )}
-      {!editCallsign && (
+      {!editCallSign && (
         <Typography
-          onClick={() => setEditCallsign(true)}
+          onClick={() => setEditCallSign(true)}
           sx={{ minWidth: '7rem' }}
-        >{station.callsign.toUpperCase()}</Typography>
+        >{station.callSign.toUpperCase()}</Typography>
       )}        
       <Attributes
         values={station.attributes}
         onChange={(e, attributes) => { updateStation({ attributes })}}
       />
       <Typography>
-        {station?.qrz && (
+        {station?.qrzData && (
           <Link
-            href={`https://www.qrz.com/db/${station?.qrz?.call}`}
+            href={`https://www.qrz.com/db/${station?.qrzData?.call}`}
             target="_blank"
             sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
           >
@@ -96,20 +96,20 @@ const Station = ({ station, removeStation, updateStation, style }) => {
         )}
       </Typography>
       <Typography sx={{ flexGrow: 1 }}>
-        {station?.qrz && (`${station?.qrz?.name_fmt} (${station?.qrz?.class}): ${station.qrz?.addr2}, ${station.qrz?.state} (${station?.qrz?.timezone})`)}
+        {station?.qrzData && (`${station?.qrzData?.name_fmt} (${station?.qrzData?.class}): ${station.qrzData?.addr2}, ${station.qrzData?.state} (${station?.qrzData?.timezone})`)}
       </Typography>
       <Box
-        onClick={() => station?.qrz?.image && setOpenProfileImageModal(true)}
+        onClick={() => station?.qrzData?.image && setOpenProfileImageModal(true)}
         component="img"
         sx={{
-          cursor: station?.qrz?.image ? 'pointer' : 'default',
+          cursor: station?.qrzData?.image ? 'pointer' : 'default',
           maxHeight: "2rem",
           objectFit: "contain",
           float: 'right',
         }}
-        src={station?.qrz?.image || genericProfilePicture}
+        src={station?.qrzData?.image || genericProfilePicture}
       />
-      {station?.qrz?.image && (
+      {station?.qrzData?.image && (
         <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
         <Box
           component="img"
@@ -120,7 +120,7 @@ const Station = ({ station, removeStation, updateStation, style }) => {
             height: "auto",
             objectFit: "contain",
           }}
-          src={station?.qrz?.image}
+          src={station?.qrzData?.image}
         />
       </ImageModal>
       )}

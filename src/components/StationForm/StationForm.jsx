@@ -16,13 +16,26 @@ const StationForm = ({ addStationToRound }) => {
     const [attributes, setAttributes] = useState([]);
     const [qrzData, setQrzData] = useState(null);
 
+    const resetStation = () => {
+        setCallSign('');
+        setName('');
+        setLocation('');
+        setAttributes([]);
+        setQrzData(null);
+    };
+
+    const addStation = station => {
+        addStationToRound({ callSign, name, location, attributes, qrzData });
+        resetStation();
+    };
+
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
           if (!validateCallsign(callSign)) {
             return;
           }
     
-          addStationToRound({ callSign, name, location, attributes, qrzData });
+          addStation();
         }
     };
     
@@ -80,13 +93,7 @@ const StationForm = ({ addStationToRound }) => {
                     onChange={(e, attributes) => setAttributes(attributes)}
                     onKeyPress={handleKeyPress}
                 />
-                <IconButton onClick={() => addStationToRound({
-                    callSign,
-                    name,
-                    location,
-                    attributes,
-                    qrzData,
-                })} variant="contained" color="primary">
+                <IconButton onClick={addStation} variant="contained" color="primary">
                     <AddBox />
                 </IconButton>
             </Grid>

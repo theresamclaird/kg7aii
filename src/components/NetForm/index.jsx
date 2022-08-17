@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid, Paper } from '@mui/material';
+import { Grid, Container, Paper } from '@mui/material';
 import RoundForm from "../RoundForm";
 import Round from "../Round";
 
@@ -25,9 +25,7 @@ const NetForm = () => {
   }));
 
   return (
-    <Grid container justifyContent="center">
-      <Grid item xs={11}>
-
+    <Container>
         <Paper sx={{ p: 1 }}>
           <Grid container rowSpacing={1}>
             <Grid item xs={12}>
@@ -48,9 +46,7 @@ const NetForm = () => {
             ))}
           </Grid>
         </Paper>
-
-      </Grid>
-    </Grid>
+    </Container>
   );
 };
 

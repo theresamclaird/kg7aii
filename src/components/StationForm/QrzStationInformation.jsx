@@ -46,6 +46,7 @@ const QrzStationInformation = ({
 
         return (
         <Grid container spacing={1}>
+            <Grid item xs={12}><Typography variant="subtitle1">QRZ Lookup:</Typography></Grid>
             <Grid item xs={3}>
                 <Box
                     onClick={() => image && setOpenProfileImageModal(true)}
@@ -71,8 +72,8 @@ const QrzStationInformation = ({
                 {aliases && <Typography variant="body2">{`Aliases: ${aliases}`}</Typography>}
                 {addr1 && <Typography variant="body2">{addr1}</Typography>}
                 {addr2 && <Typography variant="body2">{`${addr2} ${state ? state : ''} ${zip ? zip : ''}`}</Typography>}
+                {county && <Typography variant="body2">{`County: ${county}`}</Typography>}
                 {country && <Typography variant="body2">{country}</Typography>}
-                {county && <Typography variant="body2">{county}</Typography>}
                 {grid && <Typography variant="body2">{`Grid: ${grid}`}</Typography>}
                 {lat && lon && <Typography variant="body2"><Link target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`}>{`${lat}, ${lon}`} <OpenInNew sx={{ fontSize: '1rem', verticalAlign: 'middle'}} /></Link></Typography>}
             </Grid>

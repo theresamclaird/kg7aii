@@ -30,14 +30,12 @@ const stationsReducer = (stations, action) => {
 const RoundForm = ({ number, addRoundToNet }) => {
   const [stations, stationsDispatch] = useReducer(stationsReducer, []);
 
-  const addStationToRound = station => {
-    stationsDispatch({ type: STATIONS.ADD, payload: { ...station } });
-  };
+  const addStationToRound = station => stationsDispatch({ type: STATIONS.ADD, payload: { ...station } });
 
   return (
     <Grid container rowSpacing={1}>
       <Grid item xs={12}>
-        <StationForm addStationToRound={addStationToRound} />
+        <StationForm addStationToRound={station => addStationToRound(station)} />
       </Grid>
       <Grid item xs={12}>
           <Round
