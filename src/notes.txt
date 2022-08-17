@@ -1,1 +1,33 @@
 2e0lrv - station from the UK, showing undefined for expiry, country, timezone.
+
+station.PropTypes = {
+    qrz: PropTypes.objectOf(PropTypes.any),
+    
+};
+
+
+import genericProfilePicture from '../../images/genericProfile.png';
+
+  const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
+
+
+          <Box
+              onClick={() => station?.qrz?.image && setOpenProfileImageModal(true)}
+              as="img"
+              sx={{
+                  display: ['none', 'none', 'block'],
+                  cursor: station?.qrz?.image ? 'pointer' : 'default',
+                  maxHeight: '13rem',
+                  maxWidth: '100%',
+                  objectFit: "contain",
+                  m: 0,
+                  p: 0,
+                  float: ['left', 'right'],
+              }}
+              src={station?.qrz?.image || genericProfilePicture}
+          />
+          {station?.qrz?.image && (
+              <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+                  <Box sx={{ width: '100%' }} as="img" src={station?.qrz?.image} />
+              </ImageModal>
+          )}
