@@ -1,9 +1,9 @@
 import React, { useRef, useState, useContext } from "react";
-import { Grid, IconButton, TextField } from "@mui/material";
+import { Box, Grid, IconButton, TextField } from "@mui/material";
 import { AddBox } from '@mui/icons-material';
 import { QRZSessionContext } from "../QRZSession";
 import useDebounce from '../../hooks/useDebounce';
-import Attributes from '../Attributes';
+import LogAttributes from '../Attributes';
 import QrzStationInformation from "./QrzStationInformation";
 import validateCallsign from "../../utils/validateCallsign";
 
@@ -12,93 +12,102 @@ import validateCallsign from "../../utils/validateCallsign";
 const StationForm = ({ addStationToRound }) => {
     const { lookupCallsign } = useContext(QRZSessionContext);
     const callSignRef = useRef(null);
-    const [callSign, setCallSign] = useState('');
-    const [name, setName] = useState('');
-    const [location, setLocation] = useState('');
-    const [attributes, setAttributes] = useState([]);
-    const [qrzData, setQrzData] = useState(null);
+    const [station, setStation] = useState({
+        callSign: '',
+        name: '',
+        location: '',
+        attributes: [],
+        qrzData: null,
+    });
 
     const addStation = () => {
-        addStationToRound({ callSign, name, location, attributes, qrzData });
-
-        setCallSign('');
-        setName('');
-        setLocation('');
-        setAttributes([]);
-        setQrzData(null);
+        addStationToRound({ ...station });
+        setStation({
+            callSign: '',
+            name: '',
+            location: '',
+            attributes: [],
+            qrzData: null,
+        });
     };
 
-    const handleKeyPress = (e) => {
+    const handleKeyPress = e => {
         if (e.key === 'Enter') {
-          if (!validateCallsign(callSign)) {
-            return;
-          }
-    
-          addStation();
+            addStation();
+            callSignRef.current.focus();
         }
     };
     
     useDebounce(() => {
-        if (!validateCallsign(callSign)) {
-          callSignRef.current.focus();
+        if (!validateCallsign(station.callSign)) {
           return;
         }
     
-        lookupCallsign(callSign).then(qrzData => setQrzData(qrzData));
-    }, 250, [callSign]);
+        lookupCallsign(station.callSign).then(qrzData => setStation({ ...station, qrzData }));
+    }, 250, [station.callSign]);
     
     return (
-        <Grid container spacing={1}>
-            <Grid item xs={6} sm={4} md={2} lg={3}>
-                <TextField
-                    sx={{ width: '100%' }}
-                    autoFocus
-                    label="Call Sign"
-                    value={callSign}
-                    inputRef={callSignRef}
-                    variant="outlined"
-                    size="small"
-                    onKeyPress={handleKeyPress}
-                    onChange={e => setCallSign(e.target.value)}
-                />
+        <Box as="form" onKeyPress={handleKeyPress}>
+            <Grid container spacing={1}>
+                <Grid item xs={6} sm={4} md={2} lg={3}>
+                    <TextField
+                        sx={{ width: '100%' }}
+                        autoFocus
+                        label="Call Sign"
+                        value={station.callSign}
+                        inputRef={callSignRef}
+                        variant="outlined"
+                        size="small"
+                        onChange={e => setStation({ ...station, callSign: e.target.value })}
+                    />
+                </Grid>
+                <Grid item xs={6} sm={4} md={3} lg={3}>
+                    <TextField
+                        sx={{ width: '100%' }}
+                        label="Name"
+                        value={station.name}
+                        variant="outlined"
+                        size="small"
+                        onChange={e => setStation({ ...station, name: e.target.value })}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={4} md={3} lg={3}>
+                    <TextField
+                        sx={{ width: '100%' }}
+                        label="Location"
+                        value={station.location}
+                        variant="outlined"
+                        size="small"
+                        onChange={e => setStation({ ...station, location: e.target.value })}
+                    />
+                </Grid>
+                <Grid item xs={12} md={4} lg={3}>
+                    <LogAttributes
+                        attributes={station.attributes}
+                        setAttributes={attributes => setStation({
+                                ...station,
+                                reported: station.reported || attributes.includes('inAndOut'),
+                                attributes,
+                            })
+                        }
+                    />
+                    <IconButton
+                        onKeyPress={e => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                            }
+                        }}
+                        onClick={addStation}
+                        variant="contained"
+                        color="primary">
+                        <AddBox />
+                    </IconButton>
+                </Grid>
+                <Grid item xs={12}>
+                    {station.qrzData && <QrzStationInformation {...station.qrzData} />}
+                </Grid>
             </Grid>
-            <Grid item xs={6} sm={4} md={3} lg={3}>
-                <TextField
-                    sx={{ width: '100%' }}
-                    label="Name"
-                    value={name}
-                    variant="outlined"
-                    size="small"
-                    onKeyPress={handleKeyPress}
-                    onChange={e => setName(e.target.value)}
-                />
-            </Grid>
-            <Grid item xs={12} sm={4} md={3} lg={3}>
-                <TextField
-                    sx={{ width: '100%' }}
-                    label="Location"
-                    value={location}
-                    variant="outlined"
-                    size="small"
-                    onKeyPress={handleKeyPress}
-                    onChange={e => setLocation(e.target.value)}
-                />
-            </Grid>
-            <Grid item xs={12} md={4} lg={3}>
-                <Attributes
-                    values={attributes}
-                    onChange={(e, attributes) => setAttributes(attributes)}
-                    onKeyPress={handleKeyPress}
-                />
-                <IconButton onClick={addStation} variant="contained" color="primary">
-                    <AddBox />
-                </IconButton>
-            </Grid>
-            <Grid item xs={12}>
-                {qrzData && <QrzStationInformation {...qrzData} />}
-            </Grid>
-        </Grid>
-
+        </Box>
     );
 };
 

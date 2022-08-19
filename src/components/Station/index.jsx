@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import {
   Box,
+  Grid,
   Link,
   Typography,
   IconButton,
@@ -20,7 +21,7 @@ import Attributes from '../Attributes';
 import validateCallsign from "../../utils/validateCallsign";
 import genericProfilePicture from '../../images/genericProfile.png';
 
-const Station = ({ station, removeStation, updateStation, style }) => {
+const Station = ({ station, removeStation, updateStation, sx }) => {
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
   const [reported, setReported] = useState(() => station.reported ? ['reported'] : []);
   const [editCallSign, setEditCallSign] = useState(false);
@@ -28,107 +29,110 @@ const Station = ({ station, removeStation, updateStation, style }) => {
   const { lookupCallsign } = useContext(QRZSessionContext);
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      gap: 2,
-      p: 1,
-      backgroundColor: station.reported ? '#eee' : 'transparent',
-      ...style
-    }}>
-      <ToggleButtonGroup
-        size="small"
-        value={reported}
-        aria-label="station has reported"
-        onChange={(e, values) => {
-          setReported(values);
-          updateStation({ reported: values.includes('reported') });
-        }}
-      >
-        <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
-      </ToggleButtonGroup>
-      {editCallSign && (
-        <TextField
-          autoFocus
-          value={callSign}
+    <Grid
+      container
+      rowSpacing={1}
+      alignItems="center"
+      sx={{
+        backgroundColor: station.reported ? '#eee' : 'transparent',
+        p: 1,
+        ...sx,
+      }}
+    >
+      <Grid item xs={2} sm={1}>
+        <ToggleButtonGroup
           size="small"
-          sx={{ width: '7rem' }}
-          onFocus={e => e.target.select()}
-          onChange={e => setCallSign(e.target.value)}
-          onKeyPress={e => {
-            if (e.key === 'Enter') {
-              if (callSign === station.callSign) {
-                setEditCallSign(false);
-                return;
-              }
-              if (validateCallsign(callSign)) {
-                lookupCallsign(callSign).then(qrzData => {
-                  updateStation({ callSign: e.target.value, qrzData });
-                });
-                return;
-              }
-              updateStation({ callsign: e.target.value, qrzData: null });
-            }
+          value={reported}
+          aria-label="station has reported"
+          onChange={(e, values) => {
+            setReported(values);
+            updateStation({ reported: values.includes('reported') });
           }}
+        >
+          <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      <Grid item xs={3} sm={2} md={1}>
+        {editCallSign && (
+          <TextField
+            autoFocus
+            value={callSign}
+            size="small"
+            sx={{ width: '5rem' }}
+            onFocus={e => e.target.select()}
+            onChange={e => setCallSign(e.target.value)}
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                if (callSign === station.callSign) {
+                  setEditCallSign(false);
+                  return;
+                }
+                if (validateCallsign(callSign)) {
+                  lookupCallsign(callSign).then(qrzData => {
+                    updateStation({ callSign: e.target.value, qrzData });
+                  });
+                  return;
+                }
+                updateStation({ callsign: e.target.value, qrzData: null });
+              }
+            }}
+          />
+        )}
+        {!editCallSign && (
+          <Typography
+            onClick={() => setEditCallSign(true)}
+            sx={{ minWidth: '5rem' }}
+          >{station.callSign.toUpperCase()}</Typography>
+        )}        
+      </Grid>
+      <Grid item xs={7} sm={3} md={5}>
+        <Box sx={{ flexGrow: 1 }}>
+          {station?.name && <Typography>{`${station.name}${station?.location && `, ${station.location}`}`}</Typography>}
+          {station?.qrzData && <Typography>{station?.qrzData?.name_fmt}</Typography>}
+        </Box>
+      </Grid>
+      <Grid item xs={6} sm={3}>
+        <Attributes
+          attributes={station.attributes}
+          setAttributes={attributes => updateStation({ attributes })}
         />
-      )}
-      {!editCallSign && (
-        <Typography
-          onClick={() => setEditCallSign(true)}
-          sx={{ minWidth: '7rem' }}
-        >{station.callSign.toUpperCase()}</Typography>
-      )}        
-      <Attributes
-        values={station.attributes}
-        onChange={(e, attributes) => { updateStation({ attributes })}}
-      />
-      <Box sx={{ flexGrow: 1 }}>
-        {station?.name && <Typography>{`${station.name}${station?.location && `, ${station.location}`}`}</Typography>}
-        {station?.qrzData && <Typography>
-            {station?.qrzData?.name_fmt}
-            <Link
-              sx={{ ml: 1 }}
-              href={`https://www.qrz.com/db/${station?.qrzData?.call}`}
-              target="_blank"
-            >
-              QRZ<OpenInNew sx={{ fontSize: '1rem', ml: 1 }} />
-            </Link>
-        </Typography>}
-      </Box>
-      <Box
-        onClick={() => station?.qrzData?.image && setOpenProfileImageModal(true)}
-        component="img"
-        sx={{
-          cursor: station?.qrzData?.image ? 'pointer' : 'default',
-          maxHeight: "2rem",
-          objectFit: "contain",
-          float: 'right',
-        }}
-        src={station?.qrzData?.image || genericProfilePicture}
-      />
-      {station?.qrzData?.image && (
-        <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+      </Grid>
+      <Grid item xs={4} sm={2} md={1}>
         <Box
+          onClick={() => station?.qrzData?.image && setOpenProfileImageModal(true)}
           component="img"
-          style={{
-            maxWidth: "100%",
-            maxHeight: "100vh",
-            width: "auto",
-            height: "auto",
+          sx={{
+            cursor: station?.qrzData?.image ? 'pointer' : 'default',
+            maxHeight: "2rem",
             objectFit: "contain",
+            float: 'right',
           }}
-          src={station?.qrzData?.image}
+          src={station?.qrzData?.image || genericProfilePicture}
         />
-      </ImageModal>
-      )}
-      <Typography>
-        <IconButton onClick={removeStation} aria-label="remove">
-          <Delete />
-        </IconButton>
-      </Typography>
-    </Box>
+        {station?.qrzData?.image && (
+          <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+            <Box
+              component="img"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "100vh",
+                width: "auto",
+                height: "auto",
+                objectFit: "contain",
+              }}
+              src={station?.qrzData?.image}
+            />
+          </ImageModal>
+        )}
+      </Grid>
+      <Grid item xs={2} sm={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Typography>
+          <IconButton onClick={removeStation} aria-label="remove">
+            <Delete />
+          </IconButton>
+        </Typography>
+      </Grid>
+    </Grid>
   );
 };
 

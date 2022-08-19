@@ -7,15 +7,19 @@ import {
     PublishedWithChanges,
 } from '@mui/icons-material';
   
-const Attributes = ({ values, onChange, onKeyPress }) => {
-    console.log('attributes', values);
+const LogAttributes = ({ attributes, setAttributes }) => {
     return (
         <ToggleButtonGroup
+            color="primary"
             size="small"
-            value={values}
+            value={attributes}
             aria-label="in-and-out and mobile attributes"
-            onChange={(e, attributes) => onChange(e, attributes)}
-            onKeyPress={onKeyPress}
+            onChange={(e, updatedAttributes) => setAttributes(updatedAttributes)}
+            onKeyPress={e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Enter is handled by the calling component.
+                }
+            }}
         >
         <ToggleButton
             value="inAndOut"
@@ -51,4 +55,4 @@ const Attributes = ({ values, onChange, onKeyPress }) => {
     );
 };
 
-export default Attributes;
+export default LogAttributes;
