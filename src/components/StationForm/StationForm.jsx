@@ -7,28 +7,26 @@ import LogAttributes from '../Attributes';
 import QrzStationInformation from "./QrzStationInformation";
 import validateCallsign from "../../utils/validateCallsign";
 
-// todo: Attributes are not clearing after adding a station to a round.
-
 const StationForm = ({ addStationToRound }) => {
     const { lookupCallsign } = useContext(QRZSessionContext);
     const callSignRef = useRef(null);
+    const [qrzData, setQrzData] = useState(null);
     const [station, setStation] = useState({
         callSign: '',
         name: '',
         location: '',
         attributes: [],
-        qrzData: null,
     });
 
     const addStation = () => {
-        addStationToRound({ ...station });
+        addStationToRound({ ...station, qrzData });
         setStation({
             callSign: '',
             name: '',
             location: '',
             attributes: [],
-            qrzData: null,
         });
+        setQrzData(null);
     };
 
     const handleKeyPress = e => {
@@ -40,10 +38,10 @@ const StationForm = ({ addStationToRound }) => {
     
     useDebounce(() => {
         if (!validateCallsign(station.callSign)) {
-          return;
+            return;
         }
     
-        lookupCallsign(station.callSign).then(qrzData => setStation({ ...station, qrzData }));
+        lookupCallsign(station.callSign).then(qrzData => setQrzData(qrzData));
     }, 250, [station.callSign]);
     
     return (
@@ -104,7 +102,7 @@ const StationForm = ({ addStationToRound }) => {
                     </IconButton>
                 </Grid>
                 <Grid item xs={12}>
-                    {station.qrzData && <QrzStationInformation {...station.qrzData} />}
+                    <QrzStationInformation {...qrzData} />
                 </Grid>
             </Grid>
         </Box>

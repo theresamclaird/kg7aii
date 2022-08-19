@@ -52,7 +52,7 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
           <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Grid item xs={3} sm={2} md={1}>
+      <Grid item xs={3} sm={2}>
         {editCallSign && (
           <TextField
             autoFocus
@@ -85,7 +85,7 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
           >{station.callSign.toUpperCase()}</Typography>
         )}        
       </Grid>
-      <Grid item xs={7} sm={3} md={5}>
+      <Grid item xs={7} sm={3} md={4}>
         <Box sx={{ flexGrow: 1 }}>
           {station?.name && <Typography>{`${station.name}${station?.location && `, ${station.location}`}`}</Typography>}
           {station?.qrzData && <Typography>{station?.qrzData?.name_fmt}</Typography>}

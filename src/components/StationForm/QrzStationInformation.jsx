@@ -67,7 +67,7 @@ const QrzStationInformation = ({
                 )}
             </Grid>
             <Grid item xs={4}>
-                <Typography variant="subtitle2" sx={{ fontWeight: '900' }}>{`${call} (${name_fmt}${qrz?.class ? `, ${qrz?.class}` : ''})`}</Typography>
+                {call && name_fmt && <Typography variant="subtitle2" sx={{ fontWeight: '900' }}>{`${call} (${name_fmt}${qrz?.class ? `, ${qrz?.class}` : ''})`}</Typography>}
                 {aliases && <Typography variant="body2">{`Aliases: ${aliases}`}</Typography>}
                 {addr1 && <Typography variant="body2">{addr1}</Typography>}
                 {addr2 && <Typography variant="body2">{`${addr2} ${state ? state : ''} ${zip ? zip : ''}`}</Typography>}

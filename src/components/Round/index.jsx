@@ -4,7 +4,6 @@ import {
   Typography,
   IconButton,
   Grid,
-  Box,
 } from '@mui/material';
 import Station from "../Station";
 import { v4 as uuidv4 } from 'uuid';
