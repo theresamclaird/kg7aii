@@ -48,22 +48,22 @@ const Round = ({
         justifyContent: 'flex-end',
         pr: 1,
       }}>
-        <IconButton
+        {removeRound && <IconButton
             sx={{ color: 'white' }}
             size="small"
             onClick={removeRound}
             disabled={stations.length === 0}
           >
             <Delete />
-          </IconButton>
+          </IconButton>}
       </Grid>
       <Grid item xs={12}>
         {showStations && stations.map((station, index) => (
             <Station
               key={uuidv4()}
               station={station}
-              removeStation={() => removeStation(index)}
-              updateStation={stationData => updateStation(stationData, index)}
+              removeStation={removeStation ? () => removeStation(index) : null}
+              updateStation={updateStation ? stationData => updateStation(stationData, index) : null}
               sx={{ borderTop: index > 0 ? 'solid 1px #ccc' : 0 }}
             />
         ))}

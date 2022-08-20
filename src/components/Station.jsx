@@ -41,16 +41,16 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
           size="small"
           value={reported}
           aria-label="station has reported"
-          onChange={(e, values) => {
+          onChange={updateStation ? (e, values) => {
             setReported(values);
             updateStation({ reported: values.includes('reported') });
-          }}
+          } : null}
         >
           <ToggleButton value="reported">{station.reported ? <Check /> : <CheckBoxOutlineBlank />}</ToggleButton>
         </ToggleButtonGroup>
       </Grid>
       <Grid item xs={3} sm={2}>
-        {editCallSign && (
+        {updateStation && editCallSign && (
           <TextField
             autoFocus
             value={callSign}
@@ -77,7 +77,7 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
         )}
         {!editCallSign && (
           <Typography
-            onClick={() => setEditCallSign(true)}
+            onClick={updateStation ? () => setEditCallSign(true) : null}
             sx={{ minWidth: '5rem' }}
           >{station.callSign.toUpperCase()}</Typography>
         )}        
@@ -90,7 +90,7 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
       <Grid item xs={6} sm={3}>
         <Attributes
           attributes={station.attributes}
-          setAttributes={attributes => updateStation({ attributes })}
+          setAttributes={updateStation ? attributes => updateStation({ attributes }) : () => null}
         />
       </Grid>
       <Grid item xs={4} sm={2} md={1}>
@@ -122,11 +122,11 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
         )}
       </Grid>
       <Grid item xs={2} sm={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Typography>
+        {removeStation && <Typography>
           <IconButton onClick={removeStation} aria-label="remove">
             <Delete />
           </IconButton>
-        </Typography>
+        </Typography>}
       </Grid>
     </Grid>
   );
