@@ -103,7 +103,7 @@ export const QRZSessionProvider = ({ children }) => {
 
   const sessionKey = state.sessionKey;
 
-  const lookupCallsign = async (callsign) => {
+  const lookupCallsign = async callsign => {
     if (!sessionKey) {
       return;
     }
