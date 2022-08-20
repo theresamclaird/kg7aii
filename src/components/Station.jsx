@@ -15,11 +15,11 @@ import {
   ToggleButtonGroup,
   TextField,
  } from '@mui/material';
- import { QRZSessionContext } from "../QRZSession";
- import ImageModal from '../ImageModal';
-import Attributes from '../Attributes';
-import validateCallsign from "../../utils/validateCallsign";
-import genericProfilePicture from '../../images/genericProfile.png';
+ import { QRZSessionContext } from "./QRZSession";
+ import ImageModal from './ImageModal';
+import Attributes from './Attributes';
+import validateCallsign from "../utils/validateCallsign";
+import genericProfilePicture from '../images/genericProfile.png';
 
 const Station = ({ station, removeStation, updateStation, sx }) => {
   const [openProfileImageModal, setOpenProfileImageModal] = useState(false);

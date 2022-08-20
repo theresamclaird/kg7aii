@@ -31,3 +31,20 @@ import genericProfilePicture from '../../images/genericProfile.png';
                   <Box sx={{ width: '100%' }} as="img" src={station?.qrz?.image} />
               </ImageModal>
           )}
+
+
+
+https://xmldata.qrz.com/xml/current/?username=${credentials.username};password=${credentials.password}
+
+<QRZDatabase xmlns="http://xmldata.qrz.com" version="1.36">
+    <Session>
+        <Key>a4ec50f5847c8e82ec14b2b6e2f78ce5</Key>
+        <Count>5223</Count>
+        <SubExp>Sun Dec 4 17:19:15 2022</SubExp>
+        <GMTime>Sat Aug 20 04:31:53 2022</GMTime>
+        <Remark>cpu: 0.085s</Remark>
+    </Session>
+</QRZDatabase>
+
+
+https://xmldata.qrz.com/xml/current/?s=${sessionKey}&callsign=${callSign}

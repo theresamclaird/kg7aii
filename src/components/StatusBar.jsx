@@ -11,12 +11,13 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import QRZAccountDialog from '../QRZAccountDialog';
-import { Preamble, Closing } from '../ScriptsDialog';
+import QRZAccountDialog from './QRZAccountDialog';
+import Preamble from './Preamble';
+import Closing from './Closing';
 
 const currentTime = () => new Date().toLocaleString(Navigator?.languages?.[0] || 'en-US', { hour12: false });
 
-const StatusBar = () => {
+const StatusBar = ({ setQrzCredentials }) => {
   const timeRef = useRef();
   const stopwatchRef = useRef();
   const [stopwatchStartTime, setStopwatchStartTime] = useState(Date.now())
@@ -104,7 +105,11 @@ const StatusBar = () => {
         >
           <AccountCircle />
         </IconButton>
-        <QRZAccountDialog open={openQrzAccountDialog} handleClose={() => setOpenQrzAccountDialog(false)} />
+        <QRZAccountDialog
+          open={openQrzAccountDialog}
+          handleClose={() => setOpenQrzAccountDialog(false)}
+          setQrzCredentials={setQrzCredentials}
+        />
       </Toolbar>
     </AppBar>
   );

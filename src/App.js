@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Grid } from '@mui/material';
-import { PersistentItemsProvider } from './components/PersistentItemsProvider';
+import { Container } from '@mui/material';
 import { QRZSessionProvider } from './components/QRZSession';
 import NetForm from './components/NetForm';
 import StatusBar from './components/StatusBar';
@@ -17,19 +16,13 @@ import "./styles.css";
  * 
 */
 
-export default function App() {
-  return (
-    <PersistentItemsProvider localStorageKey="nets">
-      <QRZSessionProvider>
-        <StatusBar />
-        <Grid container justifyContent="center">
-          <Grid item xs={12}>
-            <Box sx={{ mt: 1 }}>
-              <NetForm />
-            </Box>
-          </Grid>
-        </Grid>
-      </QRZSessionProvider>
-    </PersistentItemsProvider>
-  );
-}
+const App = () => (
+  <QRZSessionProvider>
+    <StatusBar />
+    <Container sx={{ mt: 1 }}>
+      <NetForm />
+    </Container>
+  </QRZSessionProvider>
+);
+
+export default App;

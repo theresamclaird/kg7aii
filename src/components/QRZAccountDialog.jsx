@@ -2,26 +2,23 @@ import React, { useContext, useState } from "react";
 import {
   Button,
   FormGroup,
-  FormControlLabel,
   TextField,
-  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
-import { QRZSessionContext } from "../QRZSession";
+import { QRZSessionContext } from "./QRZSession";
 
 const QrzAccountDialog = ({ open, handleClose }) => {
   const { error, setCredentials } = useContext(QRZSessionContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [staySignedIn, setStaySignedIn] = useState(true);
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-      <DialogTitle>QRZ Account</DialogTitle>
+      <DialogTitle>QRZ</DialogTitle>
       <DialogContent>
         {error && <DialogContentText>{error.message}</DialogContentText>}
         <FormGroup>
@@ -43,10 +40,6 @@ const QrzAccountDialog = ({ open, handleClose }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             fullWidth
-          />
-          <FormControlLabel
-            control={<Checkbox value={staySignedIn} onChange={e => setStaySignedIn(e.target.value)} />}
-            label="Stay signed in"
           />
         </FormGroup>
       </DialogContent>

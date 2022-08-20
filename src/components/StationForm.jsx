@@ -1,13 +1,14 @@
 import React, { useRef, useState, useContext } from "react";
 import { Box, Grid, IconButton, TextField } from "@mui/material";
 import { AddBox } from '@mui/icons-material';
-import { QRZSessionContext } from "../QRZSession";
-import useDebounce from '../../hooks/useDebounce';
-import LogAttributes from '../Attributes';
+import { QRZSessionContext } from "./QRZSession";
+import useDebounce from '../hooks/useDebounce';
+import LogAttributes from './Attributes';
 import QrzStationInformation from "./QrzStationInformation";
-import validateCallsign from "../../utils/validateCallsign";
+import validateCallsign from "../utils/validateCallsign";
 
 const StationForm = ({ addStationToRound }) => {
+    const { sessionKey } = useContext(QRZSessionContext);
     const { lookupCallsign } = useContext(QRZSessionContext);
     const callSignRef = useRef(null);
     const [qrzData, setQrzData] = useState(null);
@@ -37,7 +38,7 @@ const StationForm = ({ addStationToRound }) => {
     };
     
     useDebounce(() => {
-        if (!validateCallsign(station.callSign)) {
+        if (!sessionKey || !validateCallsign(station.callSign)) {
             return;
         }
     
@@ -108,9 +109,9 @@ const StationForm = ({ addStationToRound }) => {
                         <AddBox />
                     </IconButton>
                 </Grid>
-                <Grid item xs={12}>
+                {!!sessionKey && <Grid item xs={12}>
                     <QrzStationInformation {...qrzData} />
-                </Grid>
+                </Grid>}
             </Grid>
         </Box>
     );

@@ -5,7 +5,7 @@ import {
   IconButton,
   Grid,
 } from '@mui/material';
-import Station from "../Station";
+import Station from "./Station";
 import { v4 as uuidv4 } from 'uuid';
 
 const Round = ({

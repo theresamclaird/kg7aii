@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import { Box, Grid, Typography, Link } from "@mui/material";
 import { OpenInNew } from '@mui/icons-material';
-import genericProfilePicture from '../../images/genericProfile.png';
-import ImageModal from '../ImageModal';
+import genericProfilePicture from '../images/genericProfile.png';
+import ImageModal from './ImageModal';
 import { useEffect } from "react";
 
 function calcTime(offset) { // todo This does not account for DST.

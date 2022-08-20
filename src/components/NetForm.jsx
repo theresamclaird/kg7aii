@@ -1,8 +1,8 @@
 import React from "react";
 import { Grid, Container, Paper } from '@mui/material';
-import { useLocalStorage } from "../../hooks/useStorage";
-import RoundForm from "../RoundForm";
-import Round from "../Round";
+import { useLocalStorage } from "../hooks/useStorage";
+import RoundForm from "./RoundForm";
+import Round from "./Round";
 
 const NetForm = () => {
   const [rounds, setRounds] = useLocalStorage('rounds', []);
