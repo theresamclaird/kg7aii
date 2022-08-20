@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useReducer } from "react";
-import { useLocalStorage } from "../../hooks/useBrowserStorage";
+import { useLocalStorage } from "../../hooks/useStorage";
 import axios from "axios";
 import { xml2js } from "xml-js";
 
