@@ -45,8 +45,8 @@ const StationForm = ({ addStationToRound }) => {
         lookupCallsign(station.callSign).then(qrzData => {
             setStation({
                 ...station,
-                name: station?.name || qrzData?.name_fmt,
-                location: station?.location || `${qrzData?.addr2}${qrzData?.state ? `, ${qrzData.state}` : ''}`,
+                name: qrzData?.name_fmt,
+                location: `${qrzData?.addr2}${qrzData?.state ? `, ${qrzData.state}` : ''}`,
             });
             setQrzData(qrzData);
         });
