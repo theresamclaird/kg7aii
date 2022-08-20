@@ -29,7 +29,7 @@ const App = () => {
             <NetForm closeNet={net => setNets([ ...nets, net ])} />
           </Grid>
           {nets.map(({ timestamp, rounds }, netIndex) => (
-            <Grid item xs={12}>
+            <Grid item xs={12} key={netIndex}>
               <Net
                 timestamp={timestamp}
                 rounds={rounds}
