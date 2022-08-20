@@ -10,7 +10,7 @@ const RoundForm = ({ number, addRoundToNet }) => {
   const addStationToRound = station => setStations([ ...stations, station ].sort((a, b) => Number(b.attributes.includes('mobile') - Number(a.attributes.includes('mobile')))));
 
   return (
-    <Grid container rowSpacing={2}>
+    <Grid container rowSpacing={1}>
       <Grid item xs={12}>
         <StationForm addStationToRound={station => addStationToRound(station)} />
       </Grid>
