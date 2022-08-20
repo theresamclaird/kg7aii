@@ -42,6 +42,7 @@ const NetForm = () => {
                   stations={stations}
                   removeStation={stationIndex => removeStationFromRound(roundIndex, stationIndex)}
                   updateStation={(stationData, stationIndex) => updateStationInRound(stationData, roundIndex, stationIndex)}
+                  removeRound={() => setRounds(rounds.filter((round, index) => roundIndex !== index))}
                 />
               </Grid>
             ))}

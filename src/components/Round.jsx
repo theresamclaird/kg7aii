@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { Delete, ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Typography,
   IconButton,
@@ -16,12 +16,13 @@ const Round = ({
   removeStation,
   updateStation,
   addRound,
+  removeRound,
 }) => {
   const [showStations, setShowStations] = useState(!hideStations);
 
   return (
     <Grid container rowSpacing={1}>
-      <Grid item xs={12} sx={{
+      <Grid item xs={11} sx={{
         backgroundColor: 'info.main',
         color: 'white',
         display: 'flex',
@@ -39,6 +40,22 @@ const Round = ({
           </IconButton>
         )}
         <Typography style={{ padding: '0.5rem' }}>{`Round ${number} (${stations.length} ${stations.length === 1 ? "station" : "stations"})`}</Typography>
+      </Grid>
+      <Grid item xs={1} sx={{
+        backgroundColor: 'info.main',
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        pr: 1,
+      }}>
+        <IconButton
+            sx={{ color: 'white' }}
+            size="small"
+            onClick={removeRound}
+            disabled={stations.length === 0}
+          >
+            <Delete />
+          </IconButton>
       </Grid>
       <Grid item xs={12}>
         {showStations && stations.map((station, index) => (

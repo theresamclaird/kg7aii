@@ -30,6 +30,9 @@ const RoundForm = ({ number, addRoundToNet }) => {
                     }}
                   ><KeyboardDoubleArrowDown /></IconButton>
               )}
+              removeRound={() => {
+                setStations([]);
+              }}
           />
       </Grid>
     </Grid>
