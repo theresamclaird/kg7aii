@@ -21,7 +21,7 @@ const Round = ({
   const [showStations, setShowStations] = useState(!hideStations);
 
   return (
-    <Grid container rowSpacing={1}>
+    <Grid container>
       <Grid item xs={11} sx={{
         backgroundColor: 'info.main',
         color: 'white',
@@ -64,10 +64,7 @@ const Round = ({
               station={station}
               removeStation={() => removeStation(index)}
               updateStation={stationData => updateStation(stationData, index)}
-              sx={{
-                borderTop: index > 0 ? 'solid 1px #ccc' : 0,
-                mb: index === stations.length - 1 ? 0 : 1,
-              }}
+              sx={{ borderTop: index > 0 ? 'solid 1px #ccc' : 0 }}
             />
         ))}
       </Grid>

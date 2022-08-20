@@ -2,13 +2,11 @@ import React, { useState, useContext } from 'react';
 import {
   Check,
   Delete,
-  OpenInNew,
   CheckBoxOutlineBlank,
 } from '@mui/icons-material';
 import {
   Box,
   Grid,
-  Link,
   Typography,
   IconButton,
   ToggleButton,
@@ -31,7 +29,6 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
   return (
     <Grid
       container
-      rowSpacing={1}
       alignItems="center"
       sx={{
         backgroundColor: station.reported ? '#eee' : 'transparent',
