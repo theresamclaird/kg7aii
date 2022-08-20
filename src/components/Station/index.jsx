@@ -88,7 +88,6 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
       <Grid item xs={7} sm={3} md={4}>
         <Box sx={{ flexGrow: 1 }}>
           {station?.name && <Typography>{`${station.name}${station?.location && `, ${station.location}`}`}</Typography>}
-          {station?.qrzData && <Typography>{station?.qrzData?.name_fmt}</Typography>}
         </Box>
       </Grid>
       <Grid item xs={6} sm={3}>
