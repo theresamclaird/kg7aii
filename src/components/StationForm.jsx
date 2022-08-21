@@ -40,14 +40,15 @@ const StationForm = ({ addStationToRound }) => {
     useDebounce(() => {
         if (!sessionKey || !validateCallsign(station.callSign)) {
             setQrzData(null);
+            setStation({ ...station, name: '', location: '' });
             return;
         }
     
         lookupCallsign(station.callSign).then(qrzData => {
             setStation({
                 ...station,
-                name: qrzData?.name_fmt,
-                location: `${qrzData?.addr2}${qrzData?.state ? `, ${qrzData.state}` : ''}`,
+                name: qrzData ? qrzData?.name_fmt || '' : '',
+                location: qrzData ? `${qrzData?.addr2}${qrzData?.state ? `, ${qrzData.state}` : ''}` : '',
             });
             setQrzData(qrzData);
         });

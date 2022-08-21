@@ -47,23 +47,21 @@ const QrzStationInformation = ({
         return (
         <Grid container spacing={1}>
             <Grid item xs={3}>
+                <Box
+                    onClick={() => image && setOpenProfileImageModal(true)}
+                    as="img"
+                    sx={{
+                        cursor: image ? 'pointer' : 'default',
+                        width: '100%',
+                        maxHeight: '13rem',
+                        objectFit: "contain",
+                    }}
+                    src={image || genericProfilePicture}
+                />
                 {image &&
-                    <>
-                        <Box
-                            onClick={() => image && setOpenProfileImageModal(true)}
-                            as="img"
-                            sx={{
-                                cursor: image ? 'pointer' : 'default',
-                                width: '100%',
-                                maxHeight: '13rem',
-                                objectFit: "contain",
-                            }}
-                            src={image || genericProfilePicture}
-                        />
-                        <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
-                            <Box sx={{ width: '100%' }} as="img" src={image} />
-                        </ImageModal>
-                    </>
+                    <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+                        <Box sx={{ width: '100%' }} as="img" src={image} />
+                    </ImageModal>
                 }
             </Grid>
             <Grid item xs={4}>
