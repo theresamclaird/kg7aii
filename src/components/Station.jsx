@@ -5,6 +5,8 @@ import {
   CheckBoxOutlineBlank,
 } from '@mui/icons-material';
 import {
+  Backdrop,
+  Paper,
   Box,
   Grid,
   Typography,
@@ -12,15 +14,16 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   TextField,
+  Modal,
  } from '@mui/material';
- import { QRZSessionContext } from "./QRZSession";
- import ImageModal from './ImageModal';
+import { QRZSessionContext } from "./QRZSession";
 import Attributes from './Attributes';
 import validateCallsign from "../utils/validateCallsign";
 import genericProfilePicture from '../images/genericProfile.png';
+import QrzStationInformation from './QrzStationInformation';
 
 const Station = ({ station, removeStation, updateStation, sx }) => {
-  const [openProfileImageModal, setOpenProfileImageModal] = useState(false);
+  const [openQrzModal, setOpenQrzModal] = useState(false);
   const [reported, setReported] = useState(() => station.reported ? ['reported'] : []);
   const [editCallSign, setEditCallSign] = useState(false);
   const [callSign, setCallSign] = useState(station.callSign);
@@ -95,7 +98,7 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
       </Grid>
       <Grid item xs={4} sm={2} md={1}>
         <Box
-          onClick={() => station?.qrzData?.image && setOpenProfileImageModal(true)}
+          onClick={() => station?.qrzData?.image && setOpenQrzModal(true)}
           component="img"
           sx={{
             cursor: station?.qrzData?.image ? 'pointer' : 'default',
@@ -105,20 +108,26 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
           }}
           src={station?.qrzData?.image || genericProfilePicture}
         />
-        {station?.qrzData?.image && (
-          <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
-            <Box
-              component="img"
-              style={{
-                maxWidth: "100%",
-                maxHeight: "100vh",
-                width: "auto",
-                height: "auto",
-                objectFit: "contain",
+        {station?.qrzData && (
+          <Modal
+            open={openQrzModal}
+            onClose={() => setOpenQrzModal(false)}
+            BackdropComponent={Backdrop}
+          >
+            <Paper
+              sx={{
+                position: 'absolute',
+                backgroundColor: 'background.paper',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                p: 2,
+                boxShadow: 3
               }}
-              src={station?.qrzData?.image}
-            />
-          </ImageModal>
+            >
+              <QrzStationInformation {...station.qrzData} />
+            </Paper>
+          </Modal>
         )}
       </Grid>
       <Grid item xs={2} sm={1} sx={{ display: 'flex', justifyContent: 'flex-end' }}>

@@ -6,8 +6,11 @@ import Round from './Round';
 const Net = ({ timestamp, rounds, removeNet }) => {
     const [show, setShow] = useState(false);
     const d = new Date(timestamp);
-    return (
-        <Paper sx={{ p: 1, }}>
+    const netTime = d.toLocaleString(Navigator?.languages?.[0] || 'en-US', { hour12: false });
+    const stationsCount = rounds.reduce((total, round) => total + round.length, 0);
+    const roundsCount = rounds.length;
+      return (
+        <Paper sx={{ p: 1, backgroundColor: 'secondary.light' }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -17,7 +20,9 @@ const Net = ({ timestamp, rounds, removeNet }) => {
                 <IconButton onClick={() => setShow(!show)}>
                     {show ? <ExpandLess /> : <ExpandMore />}
                 </IconButton>
-                <Typography>{d.toLocaleString(Navigator?.languages?.[0] || 'en-US', { hour12: false })}</Typography>
+                <Box>
+                    <Typography>{`${netTime} (${roundsCount} ${roundsCount === 1 ? 'round' : 'rounds'}, ${stationsCount} ${stationsCount === 1 ? 'station' : 'stations'})`}</Typography>
+                </Box>
                 <IconButton onClick={removeNet}>
                     <Delete />
                 </IconButton>

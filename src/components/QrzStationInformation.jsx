@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Box, Grid, Typography, Link } from "@mui/material";
+import { Box, Grid, Typography, Link, Skeleton } from "@mui/material";
 import { OpenInNew } from '@mui/icons-material';
 import genericProfilePicture from '../images/genericProfile.png';
 import ImageModal from './ImageModal';
@@ -47,24 +47,24 @@ const QrzStationInformation = ({
         return (
         <Grid container spacing={1}>
             <Grid item xs={3}>
-                <Box
-                    onClick={() => image && setOpenProfileImageModal(true)}
-                    as="img"
-                    sx={{
-                        cursor: image ? 'pointer' : 'default',
-                        width: '100%',
-                        maxHeight: '13rem',
-                        objectFit: "contain",
-                        m: 0,
-                        p: 0,
-                    }}
-                    src={image || genericProfilePicture}
-                />
-                {image && (
-                    <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
-                        <Box sx={{ width: '100%' }} as="img" src={image} />
-                    </ImageModal>
-                )}
+                {image &&
+                    <>
+                        <Box
+                            onClick={() => image && setOpenProfileImageModal(true)}
+                            as="img"
+                            sx={{
+                                cursor: image ? 'pointer' : 'default',
+                                width: '100%',
+                                maxHeight: '13rem',
+                                objectFit: "contain",
+                            }}
+                            src={image || genericProfilePicture}
+                        />
+                        <ImageModal open={openProfileImageModal} handleClose={() => setOpenProfileImageModal(false)}>
+                            <Box sx={{ width: '100%' }} as="img" src={image} />
+                        </ImageModal>
+                    </>
+                }
             </Grid>
             <Grid item xs={4}>
                 {call && name_fmt && <Typography variant="subtitle2" sx={{ fontWeight: '900' }}>{`${call} (${name_fmt}${qrz?.class ? `, ${qrz?.class}` : ''})`}</Typography>}
@@ -87,4 +87,29 @@ const QrzStationInformation = ({
     );
 };
 
-export default QrzStationInformation;
+const QrzStationSkeleton = () => (
+    <Grid container spacing={1}>
+        <Grid item xs={3}>
+            <Skeleton variant="rectangular" width="100%" height="12rem" />
+        </Grid>
+        <Grid item xs={4}>
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+        </Grid>
+        <Grid item xs={4}>
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+            <Skeleton width={`${Math.floor(Math.random() * 60 + 20)}%`} />
+        </Grid>
+    </Grid>
+);
+
+export { QrzStationInformation, QrzStationSkeleton, QrzStationInformation as default };

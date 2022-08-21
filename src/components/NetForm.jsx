@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Paper, Stack, IconButton } from '@mui/material';
+import { Box, Grid, Paper, Stack, IconButton, Typography } from '@mui/material';
 import { KeyboardDoubleArrowDown, Delete } from '@mui/icons-material';
 import { useLocalStorage } from "../hooks/useStorage";
 import RoundForm from "./RoundForm";
@@ -26,23 +26,34 @@ const NetForm = ({ closeNet }) => {
     return round.map((station, index) => index === stationIndex ? { ...station, ...stationData } : station);
   }));
 
+  const stationsCount = rounds.reduce((total, round) => total + round.length, 0);
+  const roundsCount = rounds.length;
+
   return (
     <Paper sx={{ p: 1 }}>
       <Stack sx={{
-        backgroundColor: 'info.main',
+        backgroundColor: 'secondary.main',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         mb: 1,
       }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1 }}>
+          <IconButton
+            sx={{ color: 'white' }}
+            size="small"
+            onClick={() => {
+              closeNet({ timestamp: Date.now(), rounds });
+              setRounds([]);
+            }}
+          ><KeyboardDoubleArrowDown /></IconButton>
+          <Typography sx={{ color: 'white' }}>{`(${roundsCount} ${roundsCount === 1 ? 'round' : 'rounds'}, ${stationsCount} ${stationsCount === 1 ? 'station' : 'stations'})`}</Typography>
+        </Box>
         <IconButton
-          size="small"
-          onClick={() => {
-            closeNet({ timestamp: Date.now(), rounds });
-            setRounds([]);
-          }}
-        ><KeyboardDoubleArrowDown />Close</IconButton>
-        <IconButton><Delete /></IconButton>
+          sx={{ color: 'white' }}
+          onClick={() => setRounds([])}
+        ><Delete /></IconButton>
       </Stack>
       <Grid container rowSpacing={1}>
         <Grid item xs={12}>

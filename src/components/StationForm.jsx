@@ -4,7 +4,7 @@ import { AddBox } from '@mui/icons-material';
 import { QRZSessionContext } from "./QRZSession";
 import useDebounce from '../hooks/useDebounce';
 import LogAttributes from './Attributes';
-import QrzStationInformation from "./QrzStationInformation";
+import QrzStationInformation, { QrzStationSkeleton } from "./QrzStationInformation";
 import validateCallsign from "../utils/validateCallsign";
 
 const StationForm = ({ addStationToRound }) => {
@@ -39,6 +39,7 @@ const StationForm = ({ addStationToRound }) => {
     
     useDebounce(() => {
         if (!sessionKey || !validateCallsign(station.callSign)) {
+            setQrzData(null);
             return;
         }
     
@@ -109,8 +110,9 @@ const StationForm = ({ addStationToRound }) => {
                         <AddBox />
                     </IconButton>
                 </Grid>
-                {!!sessionKey && <Grid item xs={12}>
-                    <QrzStationInformation {...qrzData} />
+                {!!sessionKey && <Grid item xs={12} sx={{ minHeight: '14rem' }}>
+                    {qrzData && <QrzStationInformation {...qrzData} />}
+                    {!qrzData && <QrzStationSkeleton />}
                 </Grid>}
             </Grid>
         </Box>
