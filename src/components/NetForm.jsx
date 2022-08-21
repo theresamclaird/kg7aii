@@ -32,7 +32,7 @@ const NetForm = ({ closeNet }) => {
   return (
     <Paper sx={{ p: 1 }}>
       <Stack sx={{
-        backgroundColor: 'secondary.main',
+        backgroundColor: 'secondary.light',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',

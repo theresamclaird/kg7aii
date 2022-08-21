@@ -17,10 +17,19 @@ const Net = ({ timestamp, rounds, removeNet }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
             }}>
-                <IconButton onClick={() => setShow(!show)}>
-                    {show ? <ExpandLess /> : <ExpandMore />}
-                </IconButton>
-                <Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        gap: 1,
+                        color: 'white',
+                    }}
+                >
+                    <IconButton sx={{ color: 'white' }} onClick={() => setShow(!show)}>
+                        {show ? <ExpandLess /> : <ExpandMore />}
+                    </IconButton>
                     <Typography>{`${netTime} (${roundsCount} ${roundsCount === 1 ? 'round' : 'rounds'}, ${stationsCount} ${stationsCount === 1 ? 'station' : 'stations'})`}</Typography>
                 </Box>
                 <IconButton onClick={removeNet}>

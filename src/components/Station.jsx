@@ -34,7 +34,7 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
       container
       alignItems="center"
       sx={{
-        backgroundColor: station.reported ? '#eee' : 'transparent',
+        backgroundColor: station.reported ? '#eee' : 'background.paper',
         p: 1,
         ...sx,
       }}
