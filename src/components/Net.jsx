@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Paper, Box, Typography, IconButton } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import { Delete, ExpandLess, ExpandMore } from '@mui/icons-material';
 import Round from './Round';
 
 const Net = ({ timestamp, rounds, removeNet }) => {
-    const d = new Date(0);
-    d.setUTCMilliseconds(timestamp)
+    const [show, setShow] = useState(false);
+    const d = new Date(timestamp);
     return (
-        <Paper sx={{ p: 1 }}>
+        <Paper sx={{ p: 1, }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
             }}>
+                <IconButton onClick={() => setShow(!show)}>
+                    {show ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
                 <Typography>{d.toLocaleString(Navigator?.languages?.[0] || 'en-US', { hour12: false })}</Typography>
                 <IconButton onClick={removeNet}>
                     <Delete />
                 </IconButton>
             </Box>
-            {rounds.map((stations, roundIndex) => (
+            {show && rounds.map((stations, roundIndex) => (
                 <Round
                     allowHideStations={true}
                     hideStations={true}

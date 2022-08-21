@@ -8,7 +8,6 @@ import Net from './components/Net';
 import "./styles.css";
 
 /* Todo:
- * 
  * - add timestamp to stations in a round; update sort order by mobile, chronological
  * - add configuration for:
  *      - preamble
