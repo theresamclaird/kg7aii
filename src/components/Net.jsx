@@ -10,7 +10,7 @@ const Net = ({ timestamp, rounds, removeNet }) => {
     const stationsCount = rounds.reduce((total, round) => total + round.length, 0);
     const roundsCount = rounds.length;
       return (
-        <Paper sx={{ p: 1, backgroundColor: 'secondary.light' }}>
+        <Paper sx={{ p: 1, backgroundColor: 'primary.light' }}>
             <Box sx={{
                 display: 'flex',
                 flexDirection: 'row',

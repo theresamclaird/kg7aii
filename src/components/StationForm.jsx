@@ -52,7 +52,7 @@ const StationForm = ({ addStationToRound }) => {
             });
             setQrzData(qrzData);
         });
-    }, 500, [station.callSign]);
+    }, 750, [station.callSign]);
     
     return (
         <Box as="form" onKeyPress={handleKeyPress}>

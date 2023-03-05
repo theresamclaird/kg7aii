@@ -23,7 +23,7 @@ const Round = ({
   return (
     <Grid container>
       <Grid item xs={11} sx={{
-        backgroundColor: 'secondary.main',
+        backgroundColor: 'primary.light',
         color: 'white',
         display: 'flex',
         flexDirection: 'row',
@@ -42,7 +42,7 @@ const Round = ({
         <Typography style={{ padding: '0.5rem' }}>{`Round ${number} (${stations.length} ${stations.length === 1 ? "station" : "stations"})`}</Typography>
       </Grid>
       <Grid item xs={1} sx={{
-        backgroundColor: 'secondary.main',
+        backgroundColor: 'primary.light',
         color: 'white',
         display: 'flex',
         justifyContent: 'flex-end',
