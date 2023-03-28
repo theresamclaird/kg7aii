@@ -12,7 +12,7 @@ const StationForm = ({ addStationToRound }) => {
     const { lookupCallsign } = useContext(QRZSessionContext);
     const callSignRef = useRef(null);
     const [qrzData, setQrzData] = useState(null);
-    const [callsign, setCallsign] = useState('');
+    const [callSign, setCallsign] = useState('');
     const [station, setStation] = useState({
         name: '',
         location: '',
@@ -20,7 +20,8 @@ const StationForm = ({ addStationToRound }) => {
     });
 
     const addStation = () => {
-        addStationToRound({ ...station, qrzData });
+        addStationToRound({ ...station, callSign, qrzData });
+        setCallsign('');
         setStation({
             name: '',
             location: '',
@@ -37,13 +38,13 @@ const StationForm = ({ addStationToRound }) => {
     };
     
     useDebounce(() => {
-        if (!sessionKey || !validateCallsign(callsign)) {
+        if (!sessionKey || !validateCallsign(callSign)) {
             setQrzData(null);
             setStation({ ...station, name: '', location: '' });
             return;
         }
     
-        lookupCallsign(callsign).then(qrzData => {
+        lookupCallsign(callSign).then(qrzData => {
             setStation({
                 ...station,
                 name: qrzData ? qrzData?.name_fmt || '' : '',
@@ -51,7 +52,7 @@ const StationForm = ({ addStationToRound }) => {
             });
             setQrzData(qrzData);
         });
-    }, 500, [callsign]);
+    }, 500, [callSign]);
     
     return (
         <Box as="form" onKeyPress={handleKeyPress}>
@@ -61,7 +62,7 @@ const StationForm = ({ addStationToRound }) => {
                         sx={{ width: '100%' }}
                         autoFocus
                         label="Call Sign"
-                        value={callsign}
+                        value={callSign}
                         inputRef={callSignRef}
                         variant="outlined"
                         size="small"
