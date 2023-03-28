@@ -98,10 +98,10 @@ const Station = ({ station, removeStation, updateStation, sx }) => {
       </Grid>
       <Grid item xs={4} sm={2} md={1}>
         <Box
-          onClick={() => station?.qrzData?.image && setOpenQrzModal(true)}
+          onClick={() => setOpenQrzModal(true)}
           component="img"
           sx={{
-            cursor: station?.qrzData?.image ? 'pointer' : 'default',
+            cursor: 'pointer',
             maxHeight: "2rem",
             objectFit: "contain",
             float: 'right',
