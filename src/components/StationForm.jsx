@@ -12,8 +12,8 @@ const StationForm = ({ addStationToRound }) => {
     const { lookupCallsign } = useContext(QRZSessionContext);
     const callSignRef = useRef(null);
     const [qrzData, setQrzData] = useState(null);
+    const [callsign, setCallsign] = useState('');
     const [station, setStation] = useState({
-        callSign: '',
         name: '',
         location: '',
         attributes: [],
@@ -22,7 +22,6 @@ const StationForm = ({ addStationToRound }) => {
     const addStation = () => {
         addStationToRound({ ...station, qrzData });
         setStation({
-            callSign: '',
             name: '',
             location: '',
             attributes: [],
@@ -38,13 +37,15 @@ const StationForm = ({ addStationToRound }) => {
     };
     
     useDebounce(() => {
-        if (!sessionKey || !validateCallsign(station.callSign)) {
+        if (!sessionKey || !validateCallsign(callsign)) {
             setQrzData(null);
             setStation({ ...station, name: '', location: '' });
             return;
         }
     
-        lookupCallsign(station.callSign).then(qrzData => {
+        lookupCallsign(callsign).then(qrzData => {
+            console.log(station);
+            console.log(qrzData);
             setStation({
                 ...station,
                 name: qrzData ? qrzData?.name_fmt || '' : '',
@@ -52,7 +53,7 @@ const StationForm = ({ addStationToRound }) => {
             });
             setQrzData(qrzData);
         });
-    }, 750, [station.callSign]);
+    }, 500, [callsign]);
     
     return (
         <Box as="form" onKeyPress={handleKeyPress}>
@@ -62,11 +63,11 @@ const StationForm = ({ addStationToRound }) => {
                         sx={{ width: '100%' }}
                         autoFocus
                         label="Call Sign"
-                        value={station.callSign}
+                        value={callsign}
                         inputRef={callSignRef}
                         variant="outlined"
                         size="small"
-                        onChange={e => setStation({ ...station, callSign: e.target.value })}
+                        onChange={e => setCallsign(e.target.value)}
                     />
                 </Grid>
                 <Grid item xs={6} sm={4} md={3} lg={3}>
